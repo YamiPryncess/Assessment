@@ -13,12 +13,12 @@ export class HomeComponent {
   cars: Car[] = [];
   products: Product[] = [];
   cols: any[] = [];
-  candidates: any;
+  candidates = [] as Candidate[];
   router: Router;
 
   constructor(http: HttpClient, @Inject('BASE_URL') baseUrl: string, _router: Router) {
     this.router = _router;
-    http.get<any>(baseUrl + 'api/candidates', {
+    http.get<Candidate[]>(baseUrl + 'api/candidates', {
       headers: new HttpHeaders({
         'Content-Type': 'application/json'
       })
@@ -36,7 +36,7 @@ export class HomeComponent {
     ]
   }
 
-  onRowView(candidate: any) {
+  onRowView(candidate: Candidate) {
     this.router.navigate(['/candidate', candidate.id ]);
   }
 

@@ -1,5 +1,21 @@
+import { TestResult } from "./testResults.model";
+
 export interface Candidate {
-  name: string,
-  score1: string,
-  score2: string
+    "id": number,
+    "createdDateTime": Date,
+    "firstName": string,
+    "lastName": string,
+    "ssn": string,
+    "dob": Date,
+    "email": string,
+    "source1": string,
+    "source2": string,
+    "desiredJobTitle": string,
+    "backgroundCheckAuthorizationTimestampET": Date,
+    "backGroundCheckLevel": string,
+    "driversLicenseState": string,
+    "driversLicenseNumber": string,
+    "status": string,
+    "createdBy": string,
+    "testResults": TestResult[]
 }

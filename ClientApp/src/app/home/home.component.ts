@@ -1,8 +1,8 @@
-import { Component, Inject } from '@angular/core';
-import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { Component } from '@angular/core';
 import {Candidate} from "../../data/candidate.model";
 import { LazyLoadEvent } from 'primeng/api';
 import { Router } from '@angular/router';
+import { HttpService } from 'src/services/Http.service';
 
 @Component({
   selector: 'app-home',
@@ -14,21 +14,14 @@ export class HomeComponent {
   products: Product[] = [];
   cols: any[] = [];
   candidates = [] as Candidate[];
-  router: Router;
 
-  constructor(http: HttpClient, @Inject('BASE_URL') baseUrl: string, _router: Router) {
-    this.router = _router;
-    http.get<Candidate[]>(baseUrl + 'api/candidates', {
-      headers: new HttpHeaders({
-        'Content-Type': 'application/json'
-      })
-    }).subscribe(result => {
-      this.candidates = result;
-    }, error => console.error(error));
-  }
+  constructor(private httpService : HttpService, private router: Router) {}
 
   ngOnInit() {
-    
+    this.httpService.getCandidates().then(result => {
+      this.candidates = result as Candidate[];
+    }).catch(error => console.error(error));;
+
     this.cols = [{ field: 'firstName' }, { field: 'First Name' },
       { field: 'lastName' }, { field: 'Last Name' },
       { field: 'snn' }, { field: 'SSN' },
@@ -37,7 +30,7 @@ export class HomeComponent {
   }
 
   onRowView(candidate: Candidate) {
-    this.router.navigate(['/candidate', candidate.id ]);
+    this.router.navigate(['/candidate', candidate.id]);
   }
 
   // loadCustomers(event: LazyLoadEvent) {

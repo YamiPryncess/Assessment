@@ -2,6 +2,7 @@ import { HttpClient, HttpHeaders } from "@angular/common/http";
 import { Inject, Injectable } from "@angular/core";
 import { Observable, Observer } from "rxjs";
 import { Candidate } from "src/data/candidate.model";
+import { Test } from "src/data/test.model";
 
 @Injectable({
     providedIn: 'root',
@@ -24,5 +25,13 @@ export class HttpService {
         'Content-Type': 'application/json'
       })
       });
+  }
+
+  getTests() {
+    return this.http.get<Test[]>(this.baseUrl + 'api/tests', {
+        headers: new HttpHeaders({
+          'Content-Type': 'application/json'
+        })
+    })
   }
 }

@@ -3,6 +3,7 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router, ActivatedRoute} from '@angular/router';
 import { take } from 'rxjs';
 import { Candidate } from 'src/data/candidate.model';
+import { Test } from 'src/data/test.model';
 import { TestResult } from 'src/data/testResults.model';
 import { HttpService } from 'src/services/Http.service';
 
@@ -15,6 +16,7 @@ export class CandidateComponent implements OnInit {
   id!: number;
   candidate = {} as Candidate;
   testResults = [] as TestResult[];
+  tests= [] as Test[];
   candidateForm = this.fb.group({
     id: [{value: null as number|null, disabled: true}, [Validators.required]],
     createdDateTime: [{value: null as Date|null, disabled: true}, [Validators.required]],
@@ -46,6 +48,10 @@ export class CandidateComponent implements OnInit {
         console.log(this.candidate);
         this.candidateForm.patchValue(this.candidate);
       });
+    });
+    this.httpService.getTests().pipe(take(1)).subscribe(
+      result => {
+      this.tests = result as Test[];
     });
   }
 

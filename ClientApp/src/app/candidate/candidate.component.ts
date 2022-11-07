@@ -56,7 +56,7 @@ export class CandidateComponent implements OnInit {
   }
 
   assignTest(test: TestResult) {
-
+    
   }
 
   onSubmit() {

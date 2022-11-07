@@ -17,7 +17,7 @@ namespace Assessment.Migrations
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "6.0.8")
+                .HasAnnotation("ProductVersion", "6.0.10")
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder, 1L, 1);
@@ -168,14 +168,14 @@ namespace Assessment.Migrations
 
             modelBuilder.Entity("Assessment.Models.Question", b =>
                 {
-                    b.Property<int>("TestId")
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
                         .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
 
                     b.Property<DateTime>("CreatedDateTime")
                         .HasColumnType("datetime2");
-
-                    b.Property<int>("Id")
-                        .HasColumnType("int");
 
                     b.Property<string>("Image")
                         .IsRequired()
@@ -185,12 +185,17 @@ namespace Assessment.Migrations
                     b.Property<int>("Index")
                         .HasColumnType("int");
 
+                    b.Property<int>("TestId")
+                        .HasColumnType("int");
+
                     b.Property<string>("Text")
                         .IsRequired()
                         .HasMaxLength(100)
                         .HasColumnType("nvarchar(100)");
 
-                    b.HasKey("TestId");
+                    b.HasKey("Id");
+
+                    b.HasIndex("TestId");
 
                     b.ToTable("Question");
                 });
@@ -221,10 +226,13 @@ namespace Assessment.Migrations
 
             modelBuilder.Entity("Assessment.Models.TestResult", b =>
                 {
-                    b.Property<int>("CandidateId")
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
-                    b.Property<int>("TestId")
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
+
+                    b.Property<int>("CandidateId")
                         .HasColumnType("int");
 
                     b.Property<DateTime>("CreatedDateTime")
@@ -238,9 +246,6 @@ namespace Assessment.Migrations
                     b.Property<DateTime>("EndTime")
                         .HasColumnType("datetime2");
 
-                    b.Property<int>("Id")
-                        .HasColumnType("int");
-
                     b.Property<int>("QuestionsAnswered")
                         .HasColumnType("int");
 
@@ -250,7 +255,12 @@ namespace Assessment.Migrations
                     b.Property<DateTime>("StartTime")
                         .HasColumnType("datetime2");
 
-                    b.HasKey("CandidateId", "TestId");
+                    b.Property<int>("TestId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("CandidateId");
 
                     b.HasIndex("TestId");
 

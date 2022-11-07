@@ -7,7 +7,6 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Assessment.Data;
 using Assessment.Models;
-using Microsoft.AspNetCore.Cors;
 
 namespace Assessment.Controllers
 {
@@ -26,10 +25,6 @@ namespace Assessment.Controllers
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Candidate>>> GetCandidate()
         {
-          if (_context.Candidate == null)
-          {
-              return NotFound();
-          }
             return await _context.Candidate.ToListAsync();
         }
 
@@ -37,10 +32,6 @@ namespace Assessment.Controllers
         [HttpGet("{id}")]
         public async Task<ActionResult<Candidate>> GetCandidate(int id)
         {
-          if (_context.Candidate == null)
-          {
-              return NotFound();
-          }
             var candidate = await _context.Candidate.FindAsync(id);
 
             if (candidate == null)
@@ -87,10 +78,6 @@ namespace Assessment.Controllers
         [HttpPost]
         public async Task<ActionResult<Candidate>> PostCandidate(Candidate candidate)
         {
-          if (_context.Candidate == null)
-          {
-              return Problem("Entity set 'ApplicationDbContext.Candidate'  is null.");
-          }
             _context.Candidate.Add(candidate);
             await _context.SaveChangesAsync();
 
@@ -101,10 +88,6 @@ namespace Assessment.Controllers
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteCandidate(int id)
         {
-            if (_context.Candidate == null)
-            {
-                return NotFound();
-            }
             var candidate = await _context.Candidate.FindAsync(id);
             if (candidate == null)
             {
@@ -119,7 +102,7 @@ namespace Assessment.Controllers
 
         private bool CandidateExists(int id)
         {
-            return (_context.Candidate?.Any(e => e.Id == id)).GetValueOrDefault();
+            return _context.Candidate.Any(e => e.Id == id);
         }
     }
 }

@@ -1,7 +1,5 @@
 ﻿using IdentityModel;
 using System.ComponentModel.DataAnnotations;
-using static Humanizer.In;
-using static Humanizer.On;
 using System.Runtime.Intrinsics.X86;
 
 namespace Assessment.Models

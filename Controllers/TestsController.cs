@@ -25,10 +25,6 @@ namespace Assessment.Controllers
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Test>>> GetTest()
         {
-          if (_context.Test == null)
-          {
-              return NotFound();
-          }
             return await _context.Test.ToListAsync();
         }
 
@@ -36,10 +32,6 @@ namespace Assessment.Controllers
         [HttpGet("{id}")]
         public async Task<ActionResult<Test>> GetTest(int id)
         {
-          if (_context.Test == null)
-          {
-              return NotFound();
-          }
             var test = await _context.Test.FindAsync(id);
 
             if (test == null)
@@ -86,10 +78,6 @@ namespace Assessment.Controllers
         [HttpPost]
         public async Task<ActionResult<Test>> PostTest(Test test)
         {
-          if (_context.Test == null)
-          {
-              return Problem("Entity set 'ApplicationDbContext.Test'  is null.");
-          }
             _context.Test.Add(test);
             await _context.SaveChangesAsync();
 
@@ -100,10 +88,6 @@ namespace Assessment.Controllers
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteTest(int id)
         {
-            if (_context.Test == null)
-            {
-                return NotFound();
-            }
             var test = await _context.Test.FindAsync(id);
             if (test == null)
             {
@@ -118,7 +102,7 @@ namespace Assessment.Controllers
 
         private bool TestExists(int id)
         {
-            return (_context.Test?.Any(e => e.Id == id)).GetValueOrDefault();
+            return _context.Test.Any(e => e.Id == id);
         }
     }
 }

@@ -25,14 +25,14 @@ namespace Assessment.Controllers
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Candidate>>> GetCandidate()
         {
-            return await _context.Candidate.ToListAsync();
+            return await _context.Candidate.Include(candidate => candidate.TestResults).ToListAsync();
         }
 
         // GET: api/Candidates/5
         [HttpGet("{id}")]
         public async Task<ActionResult<Candidate>> GetCandidate(int id)
         {
-            var candidate = await _context.Candidate.FindAsync(id);
+            var candidate = await _context.Candidate.Include(candidate => candidate.TestResults)!.ThenInclude(testResult => testResult.Test).FirstOrDefaultAsync(candidate => candidate.Id == id);
 
             if (candidate == null)
             {

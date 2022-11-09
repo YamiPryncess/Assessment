@@ -3,6 +3,7 @@ import {Candidate} from "../../data/candidate.model";
 import { LazyLoadEvent } from 'primeng/api';
 import { Router } from '@angular/router';
 import { HttpService } from 'src/services/Http.service';
+import { take } from 'rxjs';
 
 @Component({
   selector: 'app-home',
@@ -18,9 +19,9 @@ export class HomeComponent {
   constructor(private httpService : HttpService, private router: Router) {}
 
   ngOnInit() {
-    this.httpService.getCandidates().then(result => {
+    this.httpService.getCandidates().pipe(take(1)).subscribe(result => {
       this.candidates = result as Candidate[];
-    }).catch(error => console.error(error));;
+    });
 
     this.cols = [{ field: 'firstName' }, { field: 'First Name' },
       { field: 'lastName' }, { field: 'Last Name' },

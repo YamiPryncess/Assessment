@@ -6,7 +6,8 @@ import { RouterModule } from '@angular/router';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { TableModule } from 'primeng/table';
 import { ButtonModule } from 'primeng/button';
-import {TabViewModule} from 'primeng/tabview';
+import { TabViewModule } from 'primeng/tabview';
+import { AutoCompleteModule } from 'primeng/autocomplete';
 
 import { AppComponent } from './app.component';
 import { NavMenuComponent } from './nav-menu/nav-menu.component';
@@ -37,6 +38,7 @@ import { CreateCandidateComponent } from './create-candidate/create-candidate.co
     TableModule,
     ButtonModule,
     TabViewModule,
+    AutoCompleteModule,
     ApiAuthorizationModule,
     BrowserAnimationsModule,
     RouterModule.forRoot([

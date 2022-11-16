@@ -4,7 +4,7 @@ import { Router, ActivatedRoute} from '@angular/router';
 import { filter, map, take } from 'rxjs';
 import { Candidate } from 'src/data/candidate.model';
 import { Test } from 'src/data/test.model';
-import { TestResult } from 'src/data/testResults.model';
+import { Session } from 'src/data/session.model';
 import { HttpService } from 'src/services/Http.service';
 
 @Component({
@@ -15,11 +15,8 @@ import { HttpService } from 'src/services/Http.service';
 export class CandidateComponent implements OnInit {
   id!: number;
   candidate = {} as Candidate;
-  testResults = [] as TestResult[];
+  sessions = [] as Session[];
   tests = [] as Test[];
-  testsFiltered = [] as Test[];
-  selectedTest = {} as Test;
-  filter: string = "";
 
   candidateForm = this.fb.group({
     id: [{value: null as number|null, disabled: true}, [Validators.required]],
@@ -48,32 +45,18 @@ export class CandidateComponent implements OnInit {
       this.httpService.getCandidate(this.id).pipe(take(1)).subscribe(
         result => {
         this.candidate = result as Candidate;
-        this.testResults = result.testResults as TestResult[];
+        this.sessions = result.sessions as Session[];
         //console.log(this.candidate);
         this.candidateForm.patchValue(this.candidate);
       });
     });
+    this.httpService.getTests().subscribe(results => {
+      this.tests = results as Test[];
+      //console.log(this.tests);
+    })
   }
-
-  searchTests(event: any) {
-    this.httpService.getTests().pipe(map((test, i) => {
-      if(test[i].name.includes(event.query)){
-        return test;
-      }
-      return {};
-  })).subscribe((results) => {
-        console.log("Filtered: " + results);
-        this.testsFiltered = results as Test[];
-      }
-    );
-  }
-
-  selectTest(test: Test){
-    console.log("Selected: " + test)
-    this.selectedTest = test;
-  }
-
-  assignTest(test: TestResult) {
+  
+  assignTest(test: Test) {
     
   }
 

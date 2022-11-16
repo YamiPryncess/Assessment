@@ -1,4 +1,4 @@
-import { TestResult } from "./testResults.model";
+import { Session } from "./session.model";
 
 export interface Candidate {
     id: number;
@@ -17,5 +17,5 @@ export interface Candidate {
     driversLicenseNumber: string;
     status: string;
     createdBy: string;
-    testResults: TestResult[];
+    sessions: Session[];
 }

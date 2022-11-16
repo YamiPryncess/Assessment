@@ -78,15 +78,13 @@
     </p-tabPanel>
 
     <p-tabPanel header="Test Results">
-        <p-autoComplete [(ngModel)]="tests" [suggestions]="testsFiltered" field="name" (completeMethod)="searchTests($event)"
-            [dropdown]="true" (onSelect)="selectTest($event)">
-        </p-autoComplete>
-        <p-table [value]="testResults" responsiveLayout="scroll">
+        <p-table [value]="sessions" responsiveLayout="scroll">
             <ng-template pTemplate="header">
                 <tr>
                     <th pSortableColumn="id">ID<p-sortIcon field="id"></p-sortIcon></th>
                     <th pSortableColumn="testName">Test Name <p-sortIcon field="testName"></p-sortIcon></th>
                     <th pSortableColumn="createdDateTime">Assign Date <p-sortIcon field="createdDateTime"></p-sortIcon></th>
+                    <th pSortableColumn="status">Status <p-sortIcon field="status"></p-sortIcon></th>
                     <th pSortableColumn="startTime">Start Time<p-sortIcon field="startTime"></p-sortIcon></th>
                     <th pSortableColumn="endTime">End Time<p-sortIcon field="endTime"></p-sortIcon></th>
                     <th pSortableColumn="endMethod">End Method <p-sortIcon field="endMethod"></p-sortIcon></th>
@@ -95,23 +93,24 @@
                     <th pSortableColumn="questionsAnswered">Questions Answered <p-sortIcon field="questionsAnswered"></p-sortIcon></th>
                 </tr>
             </ng-template>
-            <ng-template pTemplate="body" let-testResult>
+            <ng-template pTemplate="body" let-session>
                 <tr>
-                    <td>{{testResult.id}}</td>
-                    <td>{{testResult.name}}</td>
-                    <td>{{testResult.createdDateTime}}</td>
-                    <td>{{testResult.startTime}}</td>
-                    <td>{{testResult.endTime}}</td>
-                    <td>{{testResult.endMethod}}</td>
-                    <td>{{testResult.score}}</td>
-                    <td>{{testResult.test.questionsAsked}}</td>
-                    <td>{{testResult.questionsAnswered}}</td>
+                    <td>{{session.id}}</td>
+                    <td>{{session.name}}</td>
+                    <td>{{session.createdDateTime}}</td>
+                    <td>{{session.status}}</td>
+                    <td>{{session.startTime}}</td>
+                    <td>{{session.endTime}}</td>
+                    <td>{{session.endMethod}}</td>
+                    <td>{{session.score}}</td>
+                    <td>{{session.test.questionsAsked}}</td>
+                    <td>{{session.questionsAnswered}}</td>
                 </tr>
             </ng-template>
         </p-table>
     </p-tabPanel>
     
-    <!-- <p-tabPanel header="Assign Tests">
+    <p-tabPanel header="Assign Tests">
         <p-table [value]="tests" responsiveLayout="scroll">
             <ng-template pTemplate="header">
                 <tr>
@@ -134,5 +133,5 @@
                 </tr>
             </ng-template>
         </p-table>
-    </p-tabPanel> -->
+    </p-tabPanel>
 </p-tabView>

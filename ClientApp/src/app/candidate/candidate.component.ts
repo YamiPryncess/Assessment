@@ -4,7 +4,7 @@ import { Router, ActivatedRoute} from '@angular/router';
 import { filter, map, take } from 'rxjs';
 import { Candidate } from 'src/data/candidate.model';
 import { Test } from 'src/data/test.model';
-import { Session } from 'src/data/session.model';
+import { Session, TestStatus } from 'src/data/session.model';
 import { HttpService } from 'src/services/Http.service';
 import { TestSession } from 'src/data/testsession.model';
 
@@ -44,17 +44,7 @@ export class CandidateComponent implements OnInit {
   async ngOnInit() {
     this.route.params.subscribe(params => {
       this.id = params.id;
-      this.httpService.getCandidate(this.id).pipe(take(1)).subscribe(
-        result => {
-        this.candidate = result as Candidate;
-        this.sessions = result.sessions as Session[];
-        //console.log(this.candidate);
-        this.candidateForm.patchValue(this.candidate);
-      });
-      this.httpService.getAssignedSessions(this.id).subscribe(results => {
-        this.assignedSessions = results as TestSession[];
-        console.log(this.assignedSessions);
-      })
+      this.refreshCandidate();
     });
 
     this.httpService.getTests().subscribe(results => {
@@ -62,13 +52,37 @@ export class CandidateComponent implements OnInit {
       //console.log(this.tests);
     })
   }
+
+  refreshCandidate() {
+    this.httpService.getCandidate(this.id).pipe(take(1)).subscribe(
+      result => {
+      this.candidate = result as Candidate;
+      this.sessions = result.sessions as Session[];
+      //console.log(this.candidate);
+      this.candidateForm.patchValue(this.candidate);
+    });
+    this.httpService.getAssignedSessions(this.id).subscribe(results => {
+      this.assignedSessions = results as TestSession[];
+      console.log(this.assignedSessions);
+    });
+  }
   
-  assignTest(test: Test) {
+  assignTest(toAssign: TestSession) {
+    var session = {} as Session;
     
+    session.candidateId = this.id;
+    session.testId = toAssign.testId;
+    session.status = TestStatus.Assigned;
+
+    this.httpService.PostSession(session).subscribe(results => {
+      this.refreshCandidate();
+    });
   }
 
-  unassignTest(test: Test) {
-    
+  removeTest(toRemove: TestSession) {
+    this.httpService.DeleteSession(toRemove.id).subscribe(results => {
+      this.refreshCandidate();
+    });
   }
 
   onSubmit() {

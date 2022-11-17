@@ -2,6 +2,7 @@ import { HttpClient, HttpHeaders } from "@angular/common/http";
 import { Inject, Injectable } from "@angular/core";
 import { Observable, Observer } from "rxjs";
 import { Candidate } from "src/data/candidate.model";
+import { Session } from "src/data/session.model";
 import { Test } from "src/data/test.model";
 import { TestSession } from "src/data/testsession.model";
 
@@ -35,6 +36,23 @@ export class HttpService {
         })
     });
   }
+
+  PostSession(session: Session) {
+    return this.http.post<Session[]>(this.baseUrl + 'api/sessions', session, {
+        headers: new HttpHeaders({
+          'Content-Type': 'application/json'
+        })
+    });
+  }
+
+  DeleteSession(id: number) {
+    return this.http.delete<Session[]>(this.baseUrl + 'api/sessions/' + id, {
+        headers: new HttpHeaders({
+          'Content-Type': 'application/json'
+        })
+    });
+  }
+
   getAssignedSessions(id: number) {
     return this.http.get<TestSession[]>(this.baseUrl + 'api/sessions/candidates/' + id + "/Assigned", {
         headers: new HttpHeaders({

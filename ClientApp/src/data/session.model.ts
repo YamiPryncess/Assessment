@@ -16,7 +16,7 @@ export interface Session {
     candidate: Candidate;
 }
 
-enum TestStatus {
+export enum TestStatus {
     Assigned,
     Started,
     Finished

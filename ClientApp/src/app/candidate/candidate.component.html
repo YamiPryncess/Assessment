@@ -125,7 +125,7 @@
                 <tr>
                     <td style="text-align:center">
                         <button *ngIf=!assigned.id type="button" pButton (click)="assignTest(assigned)" class="">Assign</button>
-                        <button *ngIf=assigned.id type="button" pButton (click)="unassignTest(assigned)" class="">Unassign</button>
+                        <button *ngIf=assigned.id type="button" pButton (click)="removeTest(assigned)" class="">Remove</button>
                     </td>
                     <td>{{assigned.id}}</td>
                     <td>{{assigned.name}}</td>

@@ -15,7 +15,7 @@
 <p>The <code>ClientApp</code> subdirectory is a standard Angular CLI application. If you open a command prompt in that directory, you can run any <code>ng</code> command (e.g., <code>ng test</code>), or use <code>npm</code> to install extra packages into it.</p>
 -->
 
-<button class="btn btn-primary float-end">New Candidate</button>
+<button class="btn btn-primary float-end" (click)="onNewCandidate()">New Candidate</button>
 <h1>Candidates</h1>
 
 <p-table [value]="candidates" [paginator]="true" [rows]="2" [showCurrentPageReport]="true" responsiveLayout="scroll"

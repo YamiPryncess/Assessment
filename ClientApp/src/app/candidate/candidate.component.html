@@ -1,82 +1,8 @@
 <p-tabView>
     <p-tabPanel header="Personal Info">
-        <form class="" [formGroup]="candidateForm" (ngSubmit)="onSubmit()">
-            <div class="my-5">
-                <div class="">
-                    <label for="id">ID: </label>
-                    <input id="id" type="text" formControlName="id">
-                </div>
-                <div class="">
-                    <label for="createdDateTime">Created Date: </label>
-                    <input id="createdDateTime" type="text" formControlName="createdDateTime">
-                </div>
-                <div class="">
-                    <label for="createdBy">Created By: </label>
-                    <input id="createdBy" type="text" formControlName="createdBy">
-                </div>
-            </div>
-
-            <div class="my-5">
-                <div class="">
-                    <label for="first-name">First Name: </label>
-                    <input id="first-name" type="text" formControlName="firstName">
-                </div>
-                <div class="">
-                    <label for="last-name">Last Name: </label>
-                    <input id="last-name" type="text" formControlName="lastName">
-                </div>
-                <div class="">
-                    <label for="ssn">SSN: </label>
-                    <input id="ssn" type="text" formControlName="ssn">
-                </div>
-                <div class="">
-                    <label for="dob">DOB: </label>
-                    <input id="dob" type="text" formControlName="dob">
-                </div>
-                <div class="">
-                    <label for="email">Email: </label>
-                    <input id="email" type="text" formControlName="email">
-                </div>
-                <div class="">
-                    <label for="desiredJobTitle">Desired Job Title: </label>
-                    <input id="desiredJobTitle" type="text" formControlName="desiredJobTitle">
-                </div>
-                <div class="">
-                    <label for="status">Status: </label>
-                    <input id="status" type="text" formControlName="status">
-                </div>
-            </div>
-            <div class="my-5">
-                <div class="">
-                    <label for="source1">Source One: </label>
-                    <input id="source1" type="text" formControlName="source1">
-                </div>
-                <div class="">
-                    <label for="source2">Source Two: </label>
-                    <input id="source2" type="text" formControlName="source2">
-                </div>
-                <div class="">
-                    <label for="backgroundCheckAuthorizationTimestampET">Background Check Authorization Timestamp ET: </label>
-                    <input id="backgroundCheckAuthorizationTimestampET" type="text" formControlName="backgroundCheckAuthorizationTimestampET">
-                </div>
-                <div class="">
-                    <label for="backgroundCheckLevel">Background Check Level: </label>
-                    <input id="backgroundCheckLevel" type="text" formControlName="backgroundCheckLevel">
-                </div>
-                <div class="">
-                    <label for="driversLicenseState">Drivers License State: </label>
-                    <input id="driversLicenseState" type="text" formControlName="driversLicenseState">
-                </div>
-                <div class="">
-                    <label for="driversLicenseNumber">Drivers License Number: </label>
-                    <input id="driversLicenseNumber" type="text" formControlName="driversLicenseNumber">
-                </div>
-            </div>
-
-            <button class="" type="submit" [disabled]="!candidateForm.valid">Submit</button>
-        </form>
+        
     </p-tabPanel>
-
+        <app-candidate-info #info [hideCreateInfo]="false" [submitMode]=submitMode></app-candidate-info>
     <p-tabPanel header="Test Results">
         <p-table [value]="sessions" responsiveLayout="scroll">
             <ng-template pTemplate="header">

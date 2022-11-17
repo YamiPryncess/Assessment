@@ -30,6 +30,10 @@ export class HomeComponent {
     ]
   }
 
+  onNewCandidate() {
+    this.router.navigate(['/candidate/add']);
+  }
+
   onRowView(candidate: Candidate) {
     this.router.navigate(['/candidate', candidate.id]);
   }

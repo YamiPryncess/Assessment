@@ -1,12 +1,14 @@
-import { Component, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { Component, Input, OnInit, TemplateRef, ViewChild } from '@angular/core';
 import { Router, ActivatedRoute} from '@angular/router';
 import { filter, map, take } from 'rxjs';
 import { Candidate } from 'src/data/candidate.model';
 import { Test } from 'src/data/test.model';
 import { Session, TestStatus } from 'src/data/session.model';
 import { HttpService } from 'src/services/Http.service';
-import { TestSession } from 'src/data/testsession.model';
+import { TestSession } from 'src/data/test-session.model';
+import { CandidateInfoComponent } from '../candidate-info/candidate-info.component';
+import { FormGroup } from '@angular/forms';
+import { SubmitMode } from 'src/data/submit-mode.enum';
 
 @Component({
   selector: 'app-candidate',
@@ -19,27 +21,10 @@ export class CandidateComponent implements OnInit {
   sessions = [] as Session[];
   tests = [] as Test[];
   assignedSessions = [] as TestSession[];
+  submitMode: SubmitMode = SubmitMode.Update;
+  @ViewChild('info') infoComponent!: CandidateInfoComponent;
 
-  candidateForm = this.fb.group({
-    id: [{value: null as number|null, disabled: true}, [Validators.required]],
-    createdDateTime: [{value: null as Date|null, disabled: true}, [Validators.required]],
-    firstName: ['', [Validators.required]],
-    lastName: ['', [Validators.required]],
-    ssn: ['', [Validators.required]],
-    dob: [null as Date|null],
-    email: ['', [Validators.required, Validators.pattern(/^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/)]],
-    source1: ['', [Validators.required]],
-    source2: [''],
-    desiredJobTitle: ['', [Validators.required]],
-    backgroundCheckAuthorizationTimestampET: [null as Date|null],
-    backgroundCheckLevel: [''],
-    driversLicenseState: [''],
-    driversLicenseNumber: [''],
-    status: ['', [Validators.required]],
-    createdBy: [{value: '', disabled: true}]
-  });
-
-  constructor(private httpService : HttpService, private route: ActivatedRoute, private fb: FormBuilder) {}
+  constructor(private httpService : HttpService, private route: ActivatedRoute) {}
   
   async ngOnInit() {
     this.route.params.subscribe(params => {
@@ -59,7 +44,7 @@ export class CandidateComponent implements OnInit {
       this.candidate = result as Candidate;
       this.sessions = result.sessions as Session[];
       //console.log(this.candidate);
-      this.candidateForm.patchValue(this.candidate);
+      this.infoComponent.updateForm(this.candidate);
     });
     this.httpService.getAssignedSessions(this.id).subscribe(results => {
       this.assignedSessions = results as TestSession[];
@@ -74,18 +59,14 @@ export class CandidateComponent implements OnInit {
     session.testId = toAssign.testId;
     session.status = TestStatus.Assigned;
 
-    this.httpService.PostSession(session).subscribe(results => {
+    this.httpService.postSession(session).subscribe(results => {
       this.refreshCandidate();
     });
   }
 
   removeTest(toRemove: TestSession) {
-    this.httpService.DeleteSession(toRemove.id).subscribe(results => {
+    this.httpService.deleteSession(toRemove.id).subscribe(results => {
       this.refreshCandidate();
     });
-  }
-
-  onSubmit() {
-
   }
 }

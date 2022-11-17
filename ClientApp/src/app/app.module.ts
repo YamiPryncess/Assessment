@@ -18,7 +18,7 @@ import { ApiAuthorizationModule } from 'src/api-authorization/api-authorization.
 import { AuthorizeGuard } from 'src/api-authorization/authorize.guard';
 import { AuthorizeInterceptor } from 'src/api-authorization/authorize.interceptor';
 import { CandidateComponent } from './candidate/candidate.component';
-import { CreateCandidateComponent } from './create-candidate/create-candidate.component';
+import { CandidateInfoComponent } from './candidate-info/candidate-info.component';
 
 @NgModule({
   declarations: [
@@ -28,7 +28,7 @@ import { CreateCandidateComponent } from './create-candidate/create-candidate.co
     CounterComponent,
     FetchDataComponent,
     CandidateComponent,
-    CreateCandidateComponent
+    CandidateInfoComponent
   ],
   imports: [
     BrowserModule.withServerTransition({ appId: 'ng-cli-universal' }),
@@ -43,8 +43,8 @@ import { CreateCandidateComponent } from './create-candidate/create-candidate.co
     BrowserAnimationsModule,
     RouterModule.forRoot([
       { path: '', component: HomeComponent, pathMatch: 'full' },
+      { path: 'candidate/add', component: CandidateInfoComponent},
       { path: 'candidate/:id', component: CandidateComponent},
-      { path: 'candidate', component: CreateCandidateComponent},
       { path: 'counter', component: CounterComponent },
       { path: 'fetch-data', component: FetchDataComponent, canActivate: [AuthorizeGuard] },
       { path: '**', component: HomeComponent}

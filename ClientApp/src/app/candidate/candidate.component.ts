@@ -6,6 +6,7 @@ import { Candidate } from 'src/data/candidate.model';
 import { Test } from 'src/data/test.model';
 import { Session } from 'src/data/session.model';
 import { HttpService } from 'src/services/Http.service';
+import { TestSession } from 'src/data/testsession.model';
 
 @Component({
   selector: 'app-candidate',
@@ -17,6 +18,7 @@ export class CandidateComponent implements OnInit {
   candidate = {} as Candidate;
   sessions = [] as Session[];
   tests = [] as Test[];
+  assignedSessions = [] as TestSession[];
 
   candidateForm = this.fb.group({
     id: [{value: null as number|null, disabled: true}, [Validators.required]],
@@ -49,7 +51,12 @@ export class CandidateComponent implements OnInit {
         //console.log(this.candidate);
         this.candidateForm.patchValue(this.candidate);
       });
+      this.httpService.getAssignedSessions(this.id).subscribe(results => {
+        this.assignedSessions = results as TestSession[];
+        console.log(this.assignedSessions);
+      })
     });
+
     this.httpService.getTests().subscribe(results => {
       this.tests = results as Test[];
       //console.log(this.tests);
@@ -57,6 +64,10 @@ export class CandidateComponent implements OnInit {
   }
   
   assignTest(test: Test) {
+    
+  }
+
+  unassignTest(test: Test) {
     
   }
 

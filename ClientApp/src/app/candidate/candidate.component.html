@@ -111,25 +111,26 @@
     </p-tabPanel>
     
     <p-tabPanel header="Assign Tests">
-        <p-table [value]="tests" responsiveLayout="scroll">
+        <p-table [value]="assignedSessions" responsiveLayout="scroll">
             <ng-template pTemplate="header">
                 <tr>
                     <th style="width:8rem"></th>
-                    <th pSortableColumn="id">ID<p-sortIcon field="id"></p-sortIcon></th>
+                    <th pSortableColumn="id">Session Id<p-sortIcon field="id"></p-sortIcon></th>
                     <th pSortableColumn="testName">Test Name <p-sortIcon field="testName"></p-sortIcon></th>
                     <th pSortableColumn="createdDateTime">Assign Date <p-sortIcon field="createdDateTime"></p-sortIcon></th>
                     <th pSortableColumn="questionsAsked">Questions Asked<p-sortIcon field="questionsAsked"></p-sortIcon></th>
                 </tr>
             </ng-template>
-            <ng-template pTemplate="body" let-test>
+            <ng-template pTemplate="body" let-assigned>
                 <tr>
                     <td style="text-align:center">
-                        <button type="button" pButton (click)="assignTest(test)" class="">Assign</button>
+                        <button *ngIf=!assigned.id type="button" pButton (click)="assignTest(assigned)" class="">Assign</button>
+                        <button *ngIf=assigned.id type="button" pButton (click)="unassignTest(assigned)" class="">Unassign</button>
                     </td>
-                    <td>{{test.id}}</td>
-                    <td>{{test.name}}</td>
-                    <td>{{test.createdDateTime}}</td>
-                    <td>{{test.questionsAsked}}</td>
+                    <td>{{assigned.id}}</td>
+                    <td>{{assigned.name}}</td>
+                    <td>{{assigned.createdDateTime}}</td>
+                    <td>{{assigned.questionsAsked}}</td>
                 </tr>
             </ng-template>
         </p-table>

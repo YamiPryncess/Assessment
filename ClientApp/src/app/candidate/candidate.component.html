@@ -1,8 +1,7 @@
 <p-tabView>
     <p-tabPanel header="Personal Info">
-        
-    </p-tabPanel>
         <app-candidate-info #info [hideCreateInfo]="false" [submitMode]=submitMode></app-candidate-info>
+    </p-tabPanel>
     <p-tabPanel header="Test Results">
         <p-table [value]="sessions" responsiveLayout="scroll">
             <ng-template pTemplate="header">

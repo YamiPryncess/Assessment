@@ -1,9 +1,9 @@
 import { Component, Input, OnInit, Output } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
-import { Candidate } from 'src/data/candidate.model';
-import { SubmitMode } from 'src/data/submit-mode.enum';
-import { HttpService } from 'src/services/Http.service';
+import { SubmitMode } from 'src/enums/submit-mode.enum';
+import { Candidate } from 'src/models/candidate.model';
+import { HttpService } from 'src/services/http.service';
 
 @Component({
   selector: 'app-candidate-info',

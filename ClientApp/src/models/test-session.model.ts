@@ -1,5 +1,5 @@
+import { SessionStatus } from "src/enums/session-status.enum";
 import { Candidate } from "./candidate.model"
-import { TestStatus } from "./session.model";
 import { Test } from "./test.model"
 
 export interface TestSession {
@@ -9,5 +9,5 @@ export interface TestSession {
     createdDateTime: Date;
     name: string;
     questionsAsked: number;
-    status: TestStatus;
+    status: SessionStatus;
 }

@@ -1,14 +1,14 @@
 import { Component, Input, OnInit, TemplateRef, ViewChild } from '@angular/core';
 import { Router, ActivatedRoute} from '@angular/router';
 import { filter, map, take } from 'rxjs';
-import { Candidate } from 'src/data/candidate.model';
-import { Test } from 'src/data/test.model';
-import { Session, TestStatus } from 'src/data/session.model';
-import { HttpService } from 'src/services/Http.service';
-import { TestSession } from 'src/data/test-session.model';
+import { Candidate } from 'src/models/candidate.model';
+import { Test } from 'src/models/test.model';
+import { Session } from 'src/models/session.model';
+import { HttpService } from 'src/services/http.service';
+import { TestSession } from 'src/models/test-session.model';
 import { CandidateInfoComponent } from '../candidate-info/candidate-info.component';
-import { FormGroup } from '@angular/forms';
-import { SubmitMode } from 'src/data/submit-mode.enum';
+import { SubmitMode } from 'src/enums/submit-mode.enum';
+import { SessionStatus } from 'src/enums/session-status.enum';
 
 @Component({
   selector: 'app-candidate',
@@ -57,7 +57,7 @@ export class CandidateComponent implements OnInit {
     
     session.candidateId = this.id;
     session.testId = toAssign.testId;
-    session.status = TestStatus.Assigned;
+    session.status = SessionStatus.Assigned;
 
     this.httpService.postSession(session).subscribe(results => {
       this.refreshCandidate();

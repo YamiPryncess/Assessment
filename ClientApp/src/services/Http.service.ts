@@ -1,11 +1,11 @@
 import { HttpClient, HttpHeaders } from "@angular/common/http";
 import { Inject, Injectable } from "@angular/core";
 import { Observable, Observer } from "rxjs";
-import { Candidate } from "src/data/candidate.model";
-import { Question } from "src/data/question.model";
-import { Session } from "src/data/session.model";
-import { Test } from "src/data/test.model";
-import { TestSession } from "src/data/test-session.model";
+import { Candidate } from "src/models/candidate.model";
+import { Question } from "src/models/question.model";
+import { Session } from "src/models/session.model";
+import { Test } from "src/models/test.model";
+import { TestSession } from "src/models/test-session.model";
 
 @Injectable({
     providedIn: 'root',
@@ -184,6 +184,14 @@ export class HttpService {
   }
 
   //Special
+
+  getSessionByGuid(guid: string) {
+    return this.http.get<Session>(this.baseUrl + 'api/sessions/guid/' + guid, {
+      headers: new HttpHeaders({
+        'Content-Type': 'application/json'
+      })
+    });
+  }
 
   getAssignedSessions(id: number) {
     return this.http.get<TestSession[]>(this.baseUrl + 'api/sessions/candidates/' + id + "/Assigned", {

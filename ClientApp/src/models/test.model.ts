@@ -6,6 +6,7 @@ export interface Test {
     createdDateTime: Date;
     name: string;
     questionsAsked: string;
+    minutes: number;
     sessions: Session[];
     questions: Question[];
 }

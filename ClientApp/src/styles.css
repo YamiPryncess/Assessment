@@ -1,8 +1,30 @@
 /* You can add global styles to this file, and also import other style files */
 
 /* Provide sufficient contrast against white background */
+
+@font-face {
+  font-family: "SSP-SemiBold";
+  src: url(assets\Source_Sans_Pro\SourceSansPro-SemiBold.ttf) format("truetype");
+}
+
 a {
   color: #0366d6;
+}
+
+p {
+  margin: 0;
+}
+
+h3 {
+  font-family: "SSP-SemiBold";
+  font-size: 24px;
+  line-height: normal;
+}
+
+body {
+  font-family: "SSP-SemiBold";
+  font-size: 14px;
+  line-height: normal;
 }
 
 code {
@@ -13,4 +35,19 @@ code {
   color: #fff;
   background-color: #1b6ec2;
   border-color: #1861ac;
+}
+
+:host ::ng-deep .p-button {
+  margin: 0 .5rem 0 0;
+  min-width: 10rem;
+}
+
+:host ::ng-deep .p-dialog {
+  min-width: 6rem;
+}
+
+.confirmation-content {
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }

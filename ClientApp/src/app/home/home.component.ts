@@ -1,8 +1,8 @@
 import { Component } from '@angular/core';
-import {Candidate} from "../../data/candidate.model";
+import {Candidate} from "../../models/candidate.model";
 import { LazyLoadEvent } from 'primeng/api';
 import { Router } from '@angular/router';
-import { HttpService } from 'src/services/Http.service';
+import { HttpService } from 'src/services/http.service';
 import { take } from 'rxjs';
 
 @Component({

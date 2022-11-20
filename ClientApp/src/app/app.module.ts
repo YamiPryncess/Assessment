@@ -8,6 +8,7 @@ import { TableModule } from 'primeng/table';
 import { ButtonModule } from 'primeng/button';
 import { TabViewModule } from 'primeng/tabview';
 import { AutoCompleteModule } from 'primeng/autocomplete';
+import {DialogModule} from 'primeng/dialog';
 
 import { AppComponent } from './app.component';
 import { NavMenuComponent } from './nav-menu/nav-menu.component';
@@ -19,6 +20,8 @@ import { AuthorizeGuard } from 'src/api-authorization/authorize.guard';
 import { AuthorizeInterceptor } from 'src/api-authorization/authorize.interceptor';
 import { CandidateComponent } from './candidate/candidate.component';
 import { CandidateInfoComponent } from './candidate-info/candidate-info.component';
+import { TestComponent } from './test/test.component';
+import { SessionComponent } from './session/session.component';
 
 @NgModule({
   declarations: [
@@ -28,7 +31,9 @@ import { CandidateInfoComponent } from './candidate-info/candidate-info.componen
     CounterComponent,
     FetchDataComponent,
     CandidateComponent,
-    CandidateInfoComponent
+    CandidateInfoComponent,
+    TestComponent,
+    SessionComponent
   ],
   imports: [
     BrowserModule.withServerTransition({ appId: 'ng-cli-universal' }),
@@ -38,6 +43,7 @@ import { CandidateInfoComponent } from './candidate-info/candidate-info.componen
     TableModule,
     ButtonModule,
     TabViewModule,
+    DialogModule,
     AutoCompleteModule,
     ApiAuthorizationModule,
     BrowserAnimationsModule,

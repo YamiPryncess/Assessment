@@ -13,11 +13,11 @@ import { SessionStatus } from 'src/enums/session-status.enum';
 import { EndingMethod } from 'src/enums/ending-method.enum';
 
 @Component({
-  selector: 'app-test',
-  templateUrl: './test.component.html',
-  styleUrls: ['./test.component.css']
+  selector: 'app-session',
+  templateUrl: './session.component.html',
+  styleUrls: ['./session.component.css']
 })
-export class TestComponent implements OnInit {
+export class SessionComponent implements OnInit {
   guid: string = "";
   session = {} as Session;
   tests = [] as Test[];

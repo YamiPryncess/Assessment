@@ -20,7 +20,6 @@ import { AuthorizeGuard } from 'src/api-authorization/authorize.guard';
 import { AuthorizeInterceptor } from 'src/api-authorization/authorize.interceptor';
 import { CandidateComponent } from './candidate/candidate.component';
 import { CandidateInfoComponent } from './candidate-info/candidate-info.component';
-import { TestComponent } from './test/test.component';
 import { SessionComponent } from './session/session.component';
 
 @NgModule({
@@ -32,7 +31,6 @@ import { SessionComponent } from './session/session.component';
     FetchDataComponent,
     CandidateComponent,
     CandidateInfoComponent,
-    TestComponent,
     SessionComponent
   ],
   imports: [
@@ -51,6 +49,7 @@ import { SessionComponent } from './session/session.component';
       { path: '', component: HomeComponent, pathMatch: 'full' },
       { path: 'candidate/add', component: CandidateInfoComponent},
       { path: 'candidate/:id', component: CandidateComponent},
+      { path: 'session/:guid', component: SessionComponent},
       { path: 'counter', component: CounterComponent },
       { path: 'fetch-data', component: FetchDataComponent, canActivate: [AuthorizeGuard] },
       { path: '**', component: HomeComponent}

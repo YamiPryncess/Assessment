@@ -188,7 +188,7 @@ export class HttpService {
   getSessionByGuid(guid: string) {
     return this.http.get<Session>(this.baseUrl + 'api/sessions/guid/' + guid, {
       headers: new HttpHeaders({
-        'Content-Type': 'application/json'
+        'Content-Type': 'text/plain'
       })
     });
   }

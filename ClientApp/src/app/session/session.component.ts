@@ -69,6 +69,7 @@ export class SessionComponent implements OnInit {
     if(this.session.startTime == void(0) || this.session.status == SessionStatus.Assigned) {
       this.session.startTime = new Date(startTime);
       this.session.status = SessionStatus.Started;
+      this.session.endMethod = EndingMethod.NotEnded;
       this.httpService.putSession(this.session);
     }
   }

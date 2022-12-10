@@ -1,7 +1,6 @@
 export enum EndingMethod {
-    NotEnded,
-    ManualSubmission,
-    TimeExpired,
-    BrowserClose,
-    FutureBrowserLoad
+    NotEnded = "NotEnded",
+    ManualSubmission = "ManualSubmission",
+    TimeExpired = "TimeExpired",
+    BrowserClose = "BrowserClose"
 }

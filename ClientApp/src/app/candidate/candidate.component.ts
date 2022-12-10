@@ -1,6 +1,6 @@
 import { Component, Input, OnInit, TemplateRef, ViewChild } from '@angular/core';
-import { Router, ActivatedRoute} from '@angular/router';
-import { filter, map, take } from 'rxjs';
+import { ActivatedRoute} from '@angular/router';
+import { take } from 'rxjs';
 import { Candidate } from 'src/models/candidate.model';
 import { Test } from 'src/models/test.model';
 import { Session } from 'src/models/session.model';

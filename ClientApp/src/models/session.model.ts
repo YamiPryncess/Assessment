@@ -6,6 +6,7 @@ import { Test } from "./test.model"
 
 export interface Session {
     id: number;
+    guid: string;
     createdDateTime: Date;
     testId: number;
     candidateId: number;

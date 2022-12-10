@@ -41,6 +41,7 @@
                 <tr>
                     <th style="width:8rem"></th>
                     <th pSortableColumn="id">Session Id<p-sortIcon field="id"></p-sortIcon></th>
+                    <th pSortableColumn="guid">Guid<p-sortIcon field="guid"></p-sortIcon></th>
                     <th pSortableColumn="testName">Test Name <p-sortIcon field="testName"></p-sortIcon></th>
                     <th pSortableColumn="createdDateTime">Assign Date <p-sortIcon field="createdDateTime"></p-sortIcon></th>
                     <th pSortableColumn="questionsAsked">Questions Asked<p-sortIcon field="questionsAsked"></p-sortIcon></th>
@@ -53,6 +54,7 @@
                         <button *ngIf=assigned.id type="button" pButton (click)="removeTest(assigned)" class="">Remove</button>
                     </td>
                     <td>{{assigned.id}}</td>
+                    <td>{{assigned.guid}}</td>
                     <td>{{assigned.name}}</td>
                     <td>{{assigned.createdDateTime}}</td>
                     <td>{{assigned.questionsAsked}}</td>

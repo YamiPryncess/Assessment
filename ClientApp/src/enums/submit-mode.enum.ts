@@ -1,4 +1,4 @@
 export enum SubmitMode {
-    Create,
-    Update
+    Create = "Create",
+    Update = "Update"
   }

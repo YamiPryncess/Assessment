@@ -8,6 +8,7 @@ export class TimerService {
     subscription?: Subscription;
     startTime: number = 0;
     endTime: number = 0;
+    totalMinutes: number = 0;
     timeLeft: string = "";
 
     millisecondsInMinute: number = 60 * 1000;
@@ -16,14 +17,19 @@ export class TimerService {
     constructor() {
     }
 
-    setCountdown(startTime: number, minutes: number, finishedFunc: Function) {//Count down is per minute.
+    setTime(startTime: number, minutes: number) {
+        this.totalMinutes = minutes;
+        this.startTime = startTime;
         this.endTime = startTime + this.minutesToMilliseconds(minutes);
+        
         this.updateCountdown(this.endTime - this.startTime);
+    }
+
+    startCountdown(finishedFunc: Function) {//Count down is per minute.
         this.finishedFunc = finishedFunc;
 
         this.subscription = interval(1000).subscribe(x => {
-            var now = new Date().getTime();
-            var distance = this.endTime - now;
+            var distance = (this.endTime - Date.now()) + 100;
             
             if (distance <= 0) {
                 this.finishedFunc!();
@@ -32,16 +38,33 @@ export class TimerService {
             }
             
             this.updateCountdown(distance);
+            console.log(distance);
          });
+    }
+
+    currentTimeSince(since: number) {
+        console.log("now since: ", Date.now(), " - ", since, " = ", Date.now() - since);
+        return Date.now() - since;
+    }
+
+    minutesMinusMilliseconds(minutes: number, subtractor: number) {
+        console.log("minusMilli: ", this.millisecondsToMinutes(this.minutesToMilliseconds(minutes) - subtractor));
+        return this.millisecondsToMinutes(this.minutesToMilliseconds(minutes) - subtractor);
     }
 
     minutesToMilliseconds(minutes: number) {
         return minutes * this.millisecondsInMinute;
     }
 
+    millisecondsToMinutes(minutes: number) {
+        return minutes / this.millisecondsInMinute;
+    }
+
     updateCountdown(distance: number) {
-        this.timeLeft = Math.floor(distance / this.millisecondsInMinute) + 
-            "mins : " + Math.floor(distance / this.millisecondsInSeconds) + "secs";
+        let mins = Math.floor(distance / this.millisecondsInMinute);
+        let totalSecs = Math.floor(distance / this.millisecondsInSeconds);
+        let secs = totalSecs % 60;
+        this.timeLeft = mins + "mins : " + secs + "secs";
     }
 
     stopCountdown() {

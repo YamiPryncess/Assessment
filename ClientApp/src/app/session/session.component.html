@@ -5,17 +5,15 @@
     </p>
 </div>
 
-<div *ngIf="testState === testStates.StartScreen">
-    <button type="button" class="btn btn-primary d-flex align-content-end" *ngIf="testState === testStates.StartScreen" onClick="startTest()">Start</button>
-</div>
+<button type="button" class="btn btn-primary d-flex align-content-end" *ngIf="session.status === statuses.Assigned" (click)="startTest()">Start</button>
 
-<form class="container" (ngSubmit)="onSubmit()" *ngIf="testState === testStates.DoTest || testState === testStates.TestFinished">
+<form class="container" (ngSubmit)="onSubmit()" *ngIf="session.status === statuses.Started || session.status === statuses.Finished">
     <div class="row mb-3" *ngFor="let answer of answers.controls; let i=index">
         <div>
-            <img src="{{questions[i].image}}" alt="image-{{ i }}" width="420" height="320">
+            <img src="{{session.test.questions[i].image}}" alt="image-{{ i }}" width="420" height="320">
         </div>
         <label for="test-{{ i }}" class="col-form-label form-label">
-            {{questions[i].text}}
+            {{session.test.questions[i].text}}
         </label>
         <div class="col-sm-8">
             <textarea id="test-{{ i }}" type="text" class="form-control" 
@@ -24,7 +22,7 @@
         </div>
     </div>
 
-    <button type="submit" class="btn btn-primary mb-3 float-end" onsubmit="onSubmit()" *ngIf="testState === testStates.DoTest || testState === testStates.TestFinished" [disabled]="!answers.valid || testState === testStates.TestFinished">Submit</button>
+    <button type="submit" class="btn btn-primary mb-3 float-end" onsubmit="onSubmit()" *ngIf="session.status === statuses.Started || session.status === statuses.Finished" [disabled]="!answers.valid || session.status === statuses.Finished">Submit</button>
 </form>
 
 <p-dialog header="Test Finished" [(visible)]="displayModal" [modal]="true" [style]="{width: '50vw'}"

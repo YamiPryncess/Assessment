@@ -4,6 +4,7 @@ import { Test } from "./test.model"
 
 export interface TestSession {
     id: number;
+    guid: string;
     candidateId: number;
     testId: number;
     createdDateTime: Date;

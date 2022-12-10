@@ -1,8 +1,7 @@
 import { Component, HostListener, OnInit } from '@angular/core';
-import { FormBuilder, FormArray } from '@angular/forms';
+import { FormBuilder, FormArray, FormControl } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import { take } from 'rxjs';
-import { TestState } from 'src/enums/test-state.enum';
 import { Answer } from 'src/models/answer.model';
 import { Question } from 'src/models/question.model';
 import { Session } from 'src/models/session.model';
@@ -20,12 +19,8 @@ import { EndingMethod } from 'src/enums/ending-method.enum';
 export class SessionComponent implements OnInit {
   guid: string = "";
   session = {} as Session;
-  tests = [] as Test[];
-  questions = [] as Question[];
   answers: FormArray = this.fb.array([]);
-
-  testState: TestState = TestState.Initialize;
-  readonly testStates = TestState;
+  readonly statuses = SessionStatus;
   timer: TimerService;
   displayModal: boolean = false;
 
@@ -33,86 +28,107 @@ export class SessionComponent implements OnInit {
     this.timer = _timer;
   }
 
-  @HostListener('window:beforeunload')
-  saveProgress() {
-    this.session.answers = this.textArrayToAnswerModel();
-    this.checkAndSetEnd(EndingMethod.BrowserClose);
-    this.httpService.putSession(this.session);
+  @HostListener('window:beforeunload', ['$event'])
+  async saveProgress($event: Event) {
+    if(this.session.status === SessionStatus.Started){
+      this.updateAnswers();
+      this.checkAndUpdateEnd(false, true);
+      await this.httpService.putSession(this.session).subscribe();
+    }
   }
 
-  async ngOnInit() {
+  ngOnInit() {
     this.route.params.subscribe(params => {
       this.guid = params.guid;
       this.httpService.getSessionByGuid(this.guid).pipe(take(1)).subscribe(results => {
         this.session = results as Session;
-        this.answers.patchValue(this.answerModelToTextArray());
-        if(this.session.status === SessionStatus.Assigned) {
-          this.testState = TestState.StartScreen;
-        } else if(this.session.status === SessionStatus.Started && this.checkAndSetEnd(EndingMethod.FutureBrowserLoad)) {
-          this.httpService.putSession(this.session);
-        } else if(this.session.status === SessionStatus.Started) {
-            this.testState = TestState.DoTest;
-            this.startTest(this.timer.minutesToMilliseconds(this.session.test.minutes) - (Date.now() - this.session.createdDateTime.getTime()));
-        } else {
-          this.testState = TestState.TestFinished;
-        }
         console.log(this.session);
+        this.getAnswers();
+        console.log(this.session.startTime);
+        switch(this.session.status) {
+          case SessionStatus.Started:
+            let startTime = new Date(this.session.startTime);
+            console.log("starting: ", startTime);
+            this.timer.setTime(Date.now(), this.timer.minutesMinusMilliseconds(this.session.test.minutes, this.timer.currentTimeSince(startTime.getTime())));
+            if(this.checkAndUpdateEnd()) {
+              this.showModalDialog();
+              this.httpService.putSession(this.session);
+            } else {
+              this.timer.startCountdown(() => {
+                this.onSubmit(false);
+              });
+            }
+            break;
+          case SessionStatus.Finished:
+            this.showModalDialog();
+        }
       });
     });
   }
 
-  startTest(startTime: number = Date.now(), minutes: number = .25) {
-    this.testState = TestState.DoTest;
-    this.timer.setCountdown(startTime, minutes, () => {
-      this.onSubmit(EndingMethod.TimeExpired);
-    });
+  startTest() {
+    let startTime = Date.now();
     if(this.session.startTime == void(0) || this.session.status == SessionStatus.Assigned) {
-      this.session.startTime = new Date(startTime);
+      this.session.startTime = new Date(startTime)  ;
       this.session.status = SessionStatus.Started;
       this.session.endMethod = EndingMethod.NotEnded;
       this.httpService.putSession(this.session);
     }
+    this.timer.setTime(startTime, this.session.test.minutes);
+    this.timer.startCountdown(() => {
+      this.onSubmit(false);
+    });
   }
 
-  answerModelToTextArray() {
-    let latestAnswers = [] as string[];
-    for(let i = 0; i < this.questions.length; i++) {
-      latestAnswers.push(this.session.answers[i].text as string);
+  getAnswers() {
+    for(let i = 0; i < this.session.test.questions.length; i++) {
+      let value = this.session.answers.length - 1 >= i ? this.session.answers[i].text : "";
+        this.answers.push(new FormControl(value));
     }
-    return latestAnswers;
   }
 
-  textArrayToAnswerModel() {
+  updateAnswers() {
     let latestAnswers = [] as Answer[];
-    for(let i = 0; i < this.questions.length; i++) {
+    for(let i = 0; i < this.session.test.questions.length; i++) {
       latestAnswers.push({
         text: this.answers.value[i],
-        session: this.session,
-        question: this.questions[i],
         sessionId: this.session.id,
-        questionId: this.questions[i].id
+        questionId: this.session.test.questions[i].id
       } as Answer);
     }
-    return latestAnswers;
+    this.session.answers = latestAnswers;
   }
 
-  checkAndSetEnd(endMethod: EndingMethod) {
-    if(Date.now() >= this.timer.endTime) {
+  checkAndUpdateEnd(submitted: boolean = false, browserClose: boolean = false) {
+    let expired : boolean = Date.now() >= this.timer.endTime ? true : false;
+    
+    if(submitted) {
       this.session.endTime = new Date(this.timer.endTime);
-      this.session.endMethod = endMethod;
+      this.session.endMethod = EndingMethod.ManualSubmission;
+      this.session.status = SessionStatus.Finished;
       return true;
+    } else if(this.session.endMethod === EndingMethod.BrowserClose && expired) {
+      this.session.status = SessionStatus.Finished;
+      return true;
+    } else if(expired) {
+      this.session.endTime = new Date(this.timer.endTime);
+      this.session.endMethod = EndingMethod.TimeExpired;
+      this.session.status = SessionStatus.Finished;
+      return true;
+    } else if(browserClose && !expired) {
+      this.session.endTime = new Date(this.timer.endTime);
+      this.session.endMethod = EndingMethod.BrowserClose;
+      return false;
     }
     return false;
   }
 
-  onSubmit(endingMethod: EndingMethod = EndingMethod.ManualSubmission) {
-    this.testState = TestState.TestFinished;
+  onSubmit(manualSubmission: boolean = true) {
     this.timer.stopCountdown();
     this.showModalDialog();
-    console.log(this.answers.value);
-    this.session.answers = this.textArrayToAnswerModel();
-    this.checkAndSetEnd(endingMethod);
-    this.httpService.putSession(this.session);
+    this.updateAnswers();
+    this.checkAndUpdateEnd(manualSubmission);
+    this.httpService.putSession(this.session).subscribe(x => console.log(x));
   }
 
   showModalDialog() {

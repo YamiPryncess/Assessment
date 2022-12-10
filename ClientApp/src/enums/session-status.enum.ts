@@ -1,5 +1,5 @@
 export enum SessionStatus {
-    Assigned,
-    Started,
-    Finished
+    Assigned = "Assigned",
+    Started = "Started",
+    Finished = "Finished"
 }

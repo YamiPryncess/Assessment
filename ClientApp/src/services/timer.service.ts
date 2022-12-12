@@ -1,5 +1,6 @@
 import {Injectable} from '@angular/core';
 import { Subscription, interval } from 'rxjs';
+import { DateTime } from "luxon";
 
 @Injectable({ providedIn: 'root' })
 export class TimerService {
@@ -29,27 +30,22 @@ export class TimerService {
         this.finishedFunc = finishedFunc;
 
         this.subscription = interval(1000).subscribe(x => {
-            var distance = (this.endTime - Date.now()) + 100;
-            
+            var distance = (this.endTime - DateTime.now().valueOf()) + 100;
             if (distance <= 0) {
                 this.finishedFunc!();
                 this.subscription!.unsubscribe();
                 return;
             }
-            
             this.updateCountdown(distance);
             console.log(distance);
          });
     }
 
-    currentTimeSince(since: number) {
-        console.log("now since: ", Date.now(), " - ", since, " = ", Date.now() - since);
-        return Date.now() - since;
-    }
-
-    minutesMinusMilliseconds(minutes: number, subtractor: number) {
-        console.log("minusMilli: ", this.millisecondsToMinutes(this.minutesToMilliseconds(minutes) - subtractor));
-        return this.millisecondsToMinutes(this.minutesToMilliseconds(minutes) - subtractor);
+    remainingTime(startInMillisecs: number, allotedMins: number,) {
+        let currentTime = DateTime.now().valueOf();
+        let lostTime = currentTime - startInMillisecs;
+        console.log("Start: ", startInMillisecs, "Current: ", currentTime, "Allotted: ", allotedMins, "Lost: ", lostTime, "Remaining: ", allotedMins - lostTime);
+        return this.millisecondsToMinutes(this.minutesToMilliseconds(allotedMins) - lostTime);
     }
 
     minutesToMilliseconds(minutes: number) {

@@ -2,6 +2,7 @@ import { Component, HostListener, OnInit } from '@angular/core';
 import { FormBuilder, FormArray, FormControl } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import { take } from 'rxjs';
+import { DateTime } from 'luxon';
 import { Answer } from 'src/models/answer.model';
 import { Question } from 'src/models/question.model';
 import { Session } from 'src/models/session.model';
@@ -44,12 +45,9 @@ export class SessionComponent implements OnInit {
         this.session = results as Session;
         console.log(this.session);
         this.getAnswers();
-        console.log(this.session.startTime);
         switch(this.session.status) {
           case SessionStatus.Started:
-            let startTime = new Date(this.session.startTime);
-            console.log("starting: ", startTime);
-            this.timer.setTime(Date.now(), this.timer.minutesMinusMilliseconds(this.session.test.minutes, this.timer.currentTimeSince(startTime.getTime())));
+            this.timer.setTime(DateTime.now().valueOf(), this.timer.remainingTime(DateTime.fromISO(String(this.session.startTime)).valueOf(), this.session.test.minutes));
             if(this.checkAndUpdateEnd()) {
               this.showModalDialog();
               this.httpService.putSession(this.session);
@@ -61,20 +59,21 @@ export class SessionComponent implements OnInit {
             break;
           case SessionStatus.Finished:
             this.showModalDialog();
+            break;
         }
       });
     });
   }
 
   startTest() {
-    let startTime = Date.now();
+    let startTime = DateTime.now();
     if(this.session.startTime == void(0) || this.session.status == SessionStatus.Assigned) {
-      this.session.startTime = new Date(startTime)  ;
+      this.session.startTime = startTime;
       this.session.status = SessionStatus.Started;
       this.session.endMethod = EndingMethod.NotEnded;
       this.httpService.putSession(this.session);
     }
-    this.timer.setTime(startTime, this.session.test.minutes);
+    this.timer.setTime(startTime.valueOf(), this.session.test.minutes);
     this.timer.startCountdown(() => {
       this.onSubmit(false);
     });
@@ -103,7 +102,7 @@ export class SessionComponent implements OnInit {
     let expired : boolean = Date.now() >= this.timer.endTime ? true : false;
     
     if(submitted) {
-      this.session.endTime = new Date(this.timer.endTime);
+      this.session.endTime = DateTime.fromMillis(this.timer.endTime);
       this.session.endMethod = EndingMethod.ManualSubmission;
       this.session.status = SessionStatus.Finished;
       return true;
@@ -111,12 +110,12 @@ export class SessionComponent implements OnInit {
       this.session.status = SessionStatus.Finished;
       return true;
     } else if(expired) {
-      this.session.endTime = new Date(this.timer.endTime);
+      this.session.endTime = DateTime.fromMillis(this.timer.endTime);
       this.session.endMethod = EndingMethod.TimeExpired;
       this.session.status = SessionStatus.Finished;
       return true;
     } else if(browserClose && !expired) {
-      this.session.endTime = new Date(this.timer.endTime);
+      this.session.endTime = DateTime.fromMillis(this.timer.endTime);
       this.session.endMethod = EndingMethod.BrowserClose;
       return false;
     }

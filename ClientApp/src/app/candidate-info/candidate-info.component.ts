@@ -4,6 +4,7 @@ import { Router } from '@angular/router';
 import { SubmitMode } from 'src/enums/submit-mode.enum';
 import { Candidate } from 'src/models/candidate.model';
 import { HttpService } from 'src/services/http.service';
+import { DateTime } from "luxon";
 
 @Component({
   selector: 'app-candidate-info',
@@ -18,17 +19,17 @@ export class CandidateInfoComponent implements OnInit {
   
   candidateForm = this.fb.group({
     id: [{value: null as number|null, disabled: true}, [Validators.required]],
-    createdDateTime: [{value: null as Date|null, disabled: true}, [Validators.required]],
+    createdDateTime: [{value: null as DateTime|null, disabled: true}, [Validators.required]],
     createdBy: [{value: '', disabled: true}],
     firstName: ['', [Validators.required]],
     lastName: ['', [Validators.required]],
     ssn: ['', [Validators.required]],
-    dob: [null as Date|null],
+    dob: [null as DateTime|null],
     email: ['', [Validators.required, Validators.pattern(/^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/)]],
     source1: ['', [Validators.required]],
     source2: [''],
     desiredJobTitle: ['', [Validators.required]],
-    backgroundCheckAuthorizationTimestampET: [null as Date|null],
+    backgroundCheckAuthorizationTimestampET: [null as DateTime|null],
     backgroundCheckLevel: [''],
     driversLicenseState: [''],
     driversLicenseNumber: [''],

@@ -1,8 +1,9 @@
-import { Test } from "./test.model"
+import { Test } from "./test.model";
+import { DateTime } from "luxon";
 
 export interface Question {
     id: number;
-    createdDateTime: Date;
+    createdDateTime: DateTime;
     testId: number;
     test: Test;
     text: string;

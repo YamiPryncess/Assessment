@@ -1,9 +1,10 @@
 import { Question } from "./question.model";
 import { Session } from "./session.model";
+import { DateTime } from "luxon";
 
 export interface Test {
     id: number;
-    createdDateTime: Date;
+    createdDateTime: DateTime;
     name: string;
     questionsAsked: string;
     minutes: number;

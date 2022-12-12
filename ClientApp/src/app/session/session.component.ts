@@ -1,5 +1,5 @@
 import { Component, HostListener, OnInit } from '@angular/core';
-import { FormBuilder, FormArray, FormControl } from '@angular/forms';
+import { FormBuilder, FormArray, FormControl, Validators } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import { take } from 'rxjs';
 import { DateTime } from 'luxon';
@@ -33,7 +33,7 @@ export class SessionComponent implements OnInit {
   async saveProgress($event: Event) {
     if(this.session.status === SessionStatus.Started){
       this.updateAnswers();
-      this.checkAndUpdateEnd(false, true);
+      this.checkAndUpdateEnd(this.timer.endTime, false, true);
       await this.httpService.putSession(this.session).subscribe();
     }
   }
@@ -48,7 +48,7 @@ export class SessionComponent implements OnInit {
         switch(this.session.status) {
           case SessionStatus.Started:
             this.timer.setTime(DateTime.now().valueOf(), this.timer.remainingTime(DateTime.fromISO(String(this.session.startTime)).valueOf(), this.session.test.minutes));
-            if(this.checkAndUpdateEnd()) {
+            if(this.checkAndUpdateEnd(this.timer.endTime)) {
               this.showModalDialog();
               this.httpService.putSession(this.session);
             } else {
@@ -82,7 +82,7 @@ export class SessionComponent implements OnInit {
   getAnswers() {
     for(let i = 0; i < this.session.test.questions.length; i++) {
       let value = this.session.answers.length - 1 >= i ? this.session.answers[i].text : "";
-        this.answers.push(new FormControl(value));
+        this.answers.push(new FormControl(value, Validators.required));
     }
   }
 
@@ -98,11 +98,11 @@ export class SessionComponent implements OnInit {
     this.session.answers = latestAnswers;
   }
 
-  checkAndUpdateEnd(submitted: boolean = false, browserClose: boolean = false) {
-    let expired : boolean = Date.now() >= this.timer.endTime ? true : false;
+  checkAndUpdateEnd(endTime: number, submitted: boolean = false, browserClose: boolean = false) {
+    let expired : boolean = Date.now() >= endTime ? true : false;
     
     if(submitted) {
-      this.session.endTime = DateTime.fromMillis(this.timer.endTime);
+      this.session.endTime = DateTime.fromMillis(endTime);
       this.session.endMethod = EndingMethod.ManualSubmission;
       this.session.status = SessionStatus.Finished;
       return true;
@@ -110,12 +110,12 @@ export class SessionComponent implements OnInit {
       this.session.status = SessionStatus.Finished;
       return true;
     } else if(expired) {
-      this.session.endTime = DateTime.fromMillis(this.timer.endTime);
+      this.session.endTime = DateTime.fromMillis(endTime);
       this.session.endMethod = EndingMethod.TimeExpired;
       this.session.status = SessionStatus.Finished;
       return true;
     } else if(browserClose && !expired) {
-      this.session.endTime = DateTime.fromMillis(this.timer.endTime);
+      this.session.endTime = DateTime.fromMillis(endTime);
       this.session.endMethod = EndingMethod.BrowserClose;
       return false;
     }
@@ -126,7 +126,7 @@ export class SessionComponent implements OnInit {
     this.timer.stopCountdown();
     this.showModalDialog();
     this.updateAnswers();
-    this.checkAndUpdateEnd(manualSubmission);
+    this.checkAndUpdateEnd(this.timer.endTime, manualSubmission);
     this.httpService.putSession(this.session).subscribe(x => console.log(x));
   }
 

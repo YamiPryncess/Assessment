@@ -37,14 +37,12 @@ export class TimerService {
                 return;
             }
             this.updateCountdown(distance);
-            console.log(distance);
          });
     }
 
     remainingTime(startInMillisecs: number, allotedMins: number,) {
         let currentTime = DateTime.now().valueOf();
         let lostTime = currentTime - startInMillisecs;
-        console.log("Start: ", startInMillisecs, "Current: ", currentTime, "Allotted: ", allotedMins, "Lost: ", lostTime, "Remaining: ", allotedMins - lostTime);
         return this.millisecondsToMinutes(this.minutesToMilliseconds(allotedMins) - lostTime);
     }
 

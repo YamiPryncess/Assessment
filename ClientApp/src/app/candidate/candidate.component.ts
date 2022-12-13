@@ -34,7 +34,6 @@ export class CandidateComponent implements OnInit {
 
     this.httpService.getTests().subscribe(results => {
       this.tests = results as Test[];
-      //console.log(this.tests);
     })
   }
 
@@ -43,12 +42,10 @@ export class CandidateComponent implements OnInit {
       result => {
       this.candidate = result as Candidate;
       this.sessions = result.sessions as Session[];
-      //console.log(this.candidate);
       this.infoComponent.updateForm(this.candidate);
     });
     this.httpService.getAssignedSessions(this.id).subscribe(results => {
       this.assignedSessions = results as TestSession[];
-      console.log(this.assignedSessions);
     });
   }
   

@@ -43,7 +43,6 @@ export class SessionComponent implements OnInit {
       this.guid = params.guid;
       this.httpService.getSessionByGuid(this.guid).pipe(take(1)).subscribe(results => {
         this.session = results as Session;
-        console.log(this.session);
         this.getAnswers();
         switch(this.session.status) {
           case SessionStatus.Started:
@@ -127,7 +126,7 @@ export class SessionComponent implements OnInit {
     this.showModalDialog();
     this.updateAnswers();
     this.checkAndUpdateEnd(this.timer.endTime, manualSubmission);
-    this.httpService.putSession(this.session).subscribe(x => console.log(x));
+    this.httpService.putSession(this.session);
   }
 
   showModalDialog() {

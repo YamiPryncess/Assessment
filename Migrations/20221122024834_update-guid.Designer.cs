@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Assessment.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20221107185507_Initialize Database")]
-    partial class InitializeDatabase
+    [Migration("20221122024834_update-guid")]
+    partial class updateguid
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -23,6 +23,40 @@ namespace Assessment.Migrations
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder, 1L, 1);
+
+            modelBuilder.Entity("Assessment.Models.Answer", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
+
+                    b.Property<DateTime>("CreatedDateTime")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int?>("QuestionId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("Score")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("SessionId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Text")
+                        .IsRequired()
+                        .HasMaxLength(2000)
+                        .HasColumnType("nvarchar(2000)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("QuestionId");
+
+                    b.HasIndex("SessionId");
+
+                    b.ToTable("Answer");
+                });
 
             modelBuilder.Entity("Assessment.Models.ApplicationUser", b =>
                 {
@@ -202,6 +236,57 @@ namespace Assessment.Migrations
                     b.ToTable("Question");
                 });
 
+            modelBuilder.Entity("Assessment.Models.Session", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
+
+                    b.Property<int>("CandidateId")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("CreatedDateTime")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("EndMethod")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("EndTime")
+                        .HasColumnType("datetime2");
+
+                    b.Property<Guid>("Guid")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier")
+                        .HasDefaultValueSql("NewId()");
+
+                    b.Property<int>("QuestionsAnswered")
+                        .HasColumnType("int");
+
+                    b.Property<int>("Score")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("StartTime")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Status")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("TestId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("CandidateId");
+
+                    b.HasIndex("TestId");
+
+                    b.ToTable("Session");
+                });
+
             modelBuilder.Entity("Assessment.Models.Test", b =>
                 {
                     b.Property<int>("Id")
@@ -221,52 +306,42 @@ namespace Assessment.Migrations
                     b.Property<int>("QuestionsAsked")
                         .HasColumnType("int");
 
+                    b.Property<float>("minutes")
+                        .HasColumnType("real");
+
                     b.HasKey("Id");
 
                     b.ToTable("Test");
                 });
 
-            modelBuilder.Entity("Assessment.Models.TestResult", b =>
+            modelBuilder.Entity("Assessment.Models.TestSession", b =>
                 {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
+                    b.Property<int?>("CandidateId")
                         .HasColumnType("int");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
-
-                    b.Property<int>("CandidateId")
-                        .HasColumnType("int");
-
-                    b.Property<DateTime>("CreatedDateTime")
+                    b.Property<DateTime?>("CreatedDateTime")
                         .HasColumnType("datetime2");
 
-                    b.Property<string>("EndMethod")
+                    b.Property<Guid>("Guid")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<int?>("Id")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Name")
                         .IsRequired()
-                        .HasMaxLength(50)
-                        .HasColumnType("nvarchar(50)");
+                        .HasColumnType("nvarchar(max)");
 
-                    b.Property<DateTime>("EndTime")
-                        .HasColumnType("datetime2");
-
-                    b.Property<int>("QuestionsAnswered")
+                    b.Property<int>("QuestionsAsked")
                         .HasColumnType("int");
 
-                    b.Property<int>("Score")
-                        .HasColumnType("int");
-
-                    b.Property<DateTime>("StartTime")
-                        .HasColumnType("datetime2");
+                    b.Property<string>("Status")
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<int>("TestId")
                         .HasColumnType("int");
 
-                    b.HasKey("Id");
-
-                    b.HasIndex("CandidateId");
-
-                    b.HasIndex("TestId");
-
-                    b.ToTable("TestResult");
+                    b.ToTable("TestSession");
                 });
 
             modelBuilder.Entity("Duende.IdentityServer.EntityFramework.Entities.DeviceFlowCodes", b =>
@@ -547,6 +622,21 @@ namespace Assessment.Migrations
                     b.ToTable("AspNetUserTokens", (string)null);
                 });
 
+            modelBuilder.Entity("Assessment.Models.Answer", b =>
+                {
+                    b.HasOne("Assessment.Models.Question", "Question")
+                        .WithMany("Answers")
+                        .HasForeignKey("QuestionId");
+
+                    b.HasOne("Assessment.Models.Session", "Session")
+                        .WithMany("Answers")
+                        .HasForeignKey("SessionId");
+
+                    b.Navigation("Question");
+
+                    b.Navigation("Session");
+                });
+
             modelBuilder.Entity("Assessment.Models.Question", b =>
                 {
                     b.HasOne("Assessment.Models.Test", "Test")
@@ -558,16 +648,16 @@ namespace Assessment.Migrations
                     b.Navigation("Test");
                 });
 
-            modelBuilder.Entity("Assessment.Models.TestResult", b =>
+            modelBuilder.Entity("Assessment.Models.Session", b =>
                 {
                     b.HasOne("Assessment.Models.Candidate", "Candidate")
-                        .WithMany("TestResults")
+                        .WithMany("Sessions")
                         .HasForeignKey("CandidateId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.HasOne("Assessment.Models.Test", "Test")
-                        .WithMany("TestResults")
+                        .WithMany("Sessions")
                         .HasForeignKey("TestId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -630,14 +720,24 @@ namespace Assessment.Migrations
 
             modelBuilder.Entity("Assessment.Models.Candidate", b =>
                 {
-                    b.Navigation("TestResults");
+                    b.Navigation("Sessions");
+                });
+
+            modelBuilder.Entity("Assessment.Models.Question", b =>
+                {
+                    b.Navigation("Answers");
+                });
+
+            modelBuilder.Entity("Assessment.Models.Session", b =>
+                {
+                    b.Navigation("Answers");
                 });
 
             modelBuilder.Entity("Assessment.Models.Test", b =>
                 {
                     b.Navigation("Questions");
 
-                    b.Navigation("TestResults");
+                    b.Navigation("Sessions");
                 });
 #pragma warning restore 612, 618
         }

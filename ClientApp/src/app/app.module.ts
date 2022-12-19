@@ -21,6 +21,9 @@ import { AuthorizeInterceptor } from 'src/api-authorization/authorize.intercepto
 import { CandidateComponent } from './candidate/candidate.component';
 import { CandidateInfoComponent } from './candidate-info/candidate-info.component';
 import { SessionComponent } from './session/session.component';
+import { SessionListComponent } from './session-list/session-list.component';
+import { TestListComponent } from './test-list/test-list.component';
+import { TestEditComponent } from './test-edit/test-edit.component';
 
 @NgModule({
   declarations: [
@@ -31,7 +34,10 @@ import { SessionComponent } from './session/session.component';
     FetchDataComponent,
     CandidateComponent,
     CandidateInfoComponent,
-    SessionComponent
+    SessionComponent,
+    SessionListComponent,
+    TestListComponent,
+    TestEditComponent
   ],
   imports: [
     BrowserModule.withServerTransition({ appId: 'ng-cli-universal' }),
@@ -49,7 +55,14 @@ import { SessionComponent } from './session/session.component';
       { path: '', component: HomeComponent, pathMatch: 'full' },
       { path: 'candidate/add', component: CandidateInfoComponent},
       { path: 'candidate/:id', component: CandidateComponent},
+
       { path: 'session/:guid', component: SessionComponent},
+      { path: 'session', component: SessionListComponent},
+      
+      { path: 'test/add', component: TestEditComponent},
+      { path: 'test/:id', component: TestEditComponent},
+      { path: 'test', component: TestListComponent},
+      
       { path: 'counter', component: CounterComponent },
       { path: 'fetch-data', component: FetchDataComponent, canActivate: [AuthorizeGuard] },
       { path: '**', component: HomeComponent}

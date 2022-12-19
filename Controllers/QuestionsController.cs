@@ -47,7 +47,7 @@ namespace Assessment.Controllers
         [HttpPut("{id}")]
         public async Task<IActionResult> PutQuestion(int id, Question question)
         {
-            if (id != question.TestId)
+            if (id != question.Id)
             {
                 return BadRequest();
             }
@@ -79,23 +79,9 @@ namespace Assessment.Controllers
         public async Task<ActionResult<Question>> PostQuestion(Question question)
         {
             _context.Question.Add(question);
-            try
-            {
-                await _context.SaveChangesAsync();
-            }
-            catch (DbUpdateException)
-            {
-                if (QuestionExists(question.TestId))
-                {
-                    return Conflict();
-                }
-                else
-                {
-                    throw;
-                }
-            }
+            await _context.SaveChangesAsync();
 
-            return CreatedAtAction("GetQuestion", new { id = question.TestId }, question);
+            return CreatedAtAction("GetQuestion", new { id = question.Id }, question);
         }
 
         // DELETE: api/Questions/5
@@ -116,7 +102,7 @@ namespace Assessment.Controllers
 
         private bool QuestionExists(int id)
         {
-            return _context.Question.Any(e => e.TestId == id);
+            return _context.Question.Any(e => e.Id == id);
         }
     }
 }

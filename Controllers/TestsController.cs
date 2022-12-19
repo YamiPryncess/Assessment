@@ -25,7 +25,7 @@ namespace Assessment.Controllers
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Test>>> GetTest()
         {
-            return await _context.Test.ToListAsync();
+            return await _context.Test.Include(t => t.Questions).ToListAsync();
         }
 
         // GET: api/Tests/5

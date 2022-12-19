@@ -5,7 +5,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace Assessment.Migrations
 {
-    public partial class InitializeDatabase : Migration
+    public partial class InitailizeDatabase : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -277,13 +277,14 @@ namespace Assessment.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "TestResult",
+                name: "Session",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     TestId = table.Column<int>(type: "int", nullable: false),
                     CandidateId = table.Column<int>(type: "int", nullable: false),
+                    Status = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     CreatedDateTime = table.Column<DateTime>(type: "datetime2", nullable: false),
                     StartTime = table.Column<DateTime>(type: "datetime2", nullable: false),
                     EndTime = table.Column<DateTime>(type: "datetime2", nullable: false),
@@ -293,15 +294,15 @@ namespace Assessment.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_TestResult", x => x.Id);
+                    table.PrimaryKey("PK_Session", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_TestResult_Candidate_CandidateId",
+                        name: "FK_Session_Candidate_CandidateId",
                         column: x => x.CandidateId,
                         principalTable: "Candidate",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_TestResult_Test_TestId",
+                        name: "FK_Session_Test_TestId",
                         column: x => x.TestId,
                         principalTable: "Test",
                         principalColumn: "Id",
@@ -389,13 +390,13 @@ namespace Assessment.Migrations
                 column: "TestId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_TestResult_CandidateId",
-                table: "TestResult",
+                name: "IX_Session_CandidateId",
+                table: "Session",
                 column: "CandidateId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_TestResult_TestId",
-                table: "TestResult",
+                name: "IX_Session_TestId",
+                table: "Session",
                 column: "TestId");
         }
 
@@ -429,7 +430,7 @@ namespace Assessment.Migrations
                 name: "Question");
 
             migrationBuilder.DropTable(
-                name: "TestResult");
+                name: "Session");
 
             migrationBuilder.DropTable(
                 name: "AspNetRoles");

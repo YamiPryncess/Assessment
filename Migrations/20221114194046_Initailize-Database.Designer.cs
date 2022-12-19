@@ -4,6 +4,7 @@ using Assessment.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,10 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Assessment.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20221114194046_Initailize-Database")]
+    partial class InitailizeDatabase
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -21,40 +23,6 @@ namespace Assessment.Migrations
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder, 1L, 1);
-
-            modelBuilder.Entity("Assessment.Models.Answer", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
-
-                    b.Property<DateTime>("CreatedDateTime")
-                        .HasColumnType("datetime2");
-
-                    b.Property<int?>("QuestionId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("Score")
-                        .HasColumnType("int");
-
-                    b.Property<int?>("SessionId")
-                        .HasColumnType("int");
-
-                    b.Property<string>("Text")
-                        .IsRequired()
-                        .HasMaxLength(2000)
-                        .HasColumnType("nvarchar(2000)");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("QuestionId");
-
-                    b.HasIndex("SessionId");
-
-                    b.ToTable("Answer", (string)null);
-                });
 
             modelBuilder.Entity("Assessment.Models.ApplicationUser", b =>
                 {
@@ -197,7 +165,7 @@ namespace Assessment.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Candidate", (string)null);
+                    b.ToTable("Candidate");
                 });
 
             modelBuilder.Entity("Assessment.Models.Question", b =>
@@ -231,7 +199,7 @@ namespace Assessment.Migrations
 
                     b.HasIndex("TestId");
 
-                    b.ToTable("Question", (string)null);
+                    b.ToTable("Question");
                 });
 
             modelBuilder.Entity("Assessment.Models.Session", b =>
@@ -250,15 +218,11 @@ namespace Assessment.Migrations
 
                     b.Property<string>("EndMethod")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
 
-                    b.Property<DateTime?>("EndTime")
+                    b.Property<DateTime>("EndTime")
                         .HasColumnType("datetime2");
-
-                    b.Property<Guid>("Guid")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier")
-                        .HasDefaultValueSql("NewId()");
 
                     b.Property<int>("QuestionsAnswered")
                         .HasColumnType("int");
@@ -266,7 +230,7 @@ namespace Assessment.Migrations
                     b.Property<int>("Score")
                         .HasColumnType("int");
 
-                    b.Property<DateTime?>("StartTime")
+                    b.Property<DateTime>("StartTime")
                         .HasColumnType("datetime2");
 
                     b.Property<string>("Status")
@@ -282,7 +246,7 @@ namespace Assessment.Migrations
 
                     b.HasIndex("TestId");
 
-                    b.ToTable("Session", (string)null);
+                    b.ToTable("Session");
                 });
 
             modelBuilder.Entity("Assessment.Models.Test", b =>
@@ -304,42 +268,9 @@ namespace Assessment.Migrations
                     b.Property<int>("QuestionsAsked")
                         .HasColumnType("int");
 
-                    b.Property<float>("minutes")
-                        .HasColumnType("real");
-
                     b.HasKey("Id");
 
-                    b.ToTable("Test", (string)null);
-                });
-
-            modelBuilder.Entity("Assessment.Models.TestSession", b =>
-                {
-                    b.Property<int?>("CandidateId")
-                        .HasColumnType("int");
-
-                    b.Property<DateTime?>("CreatedDateTime")
-                        .HasColumnType("datetime2");
-
-                    b.Property<Guid?>("Guid")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<int?>("Id")
-                        .HasColumnType("int");
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int>("QuestionsAsked")
-                        .HasColumnType("int");
-
-                    b.Property<string>("Status")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int>("TestId")
-                        .HasColumnType("int");
-
-                    b.ToTable("TestSession", (string)null);
+                    b.ToTable("Test");
                 });
 
             modelBuilder.Entity("Duende.IdentityServer.EntityFramework.Entities.DeviceFlowCodes", b =>
@@ -425,7 +356,7 @@ namespace Assessment.Migrations
 
                     b.HasIndex("Use");
 
-                    b.ToTable("Keys", (string)null);
+                    b.ToTable("Keys");
                 });
 
             modelBuilder.Entity("Duende.IdentityServer.EntityFramework.Entities.PersistedGrant", b =>
@@ -620,21 +551,6 @@ namespace Assessment.Migrations
                     b.ToTable("AspNetUserTokens", (string)null);
                 });
 
-            modelBuilder.Entity("Assessment.Models.Answer", b =>
-                {
-                    b.HasOne("Assessment.Models.Question", "Question")
-                        .WithMany("Answers")
-                        .HasForeignKey("QuestionId");
-
-                    b.HasOne("Assessment.Models.Session", "Session")
-                        .WithMany("Answers")
-                        .HasForeignKey("SessionId");
-
-                    b.Navigation("Question");
-
-                    b.Navigation("Session");
-                });
-
             modelBuilder.Entity("Assessment.Models.Question", b =>
                 {
                     b.HasOne("Assessment.Models.Test", "Test")
@@ -719,16 +635,6 @@ namespace Assessment.Migrations
             modelBuilder.Entity("Assessment.Models.Candidate", b =>
                 {
                     b.Navigation("Sessions");
-                });
-
-            modelBuilder.Entity("Assessment.Models.Question", b =>
-                {
-                    b.Navigation("Answers");
-                });
-
-            modelBuilder.Entity("Assessment.Models.Session", b =>
-                {
-                    b.Navigation("Answers");
                 });
 
             modelBuilder.Entity("Assessment.Models.Test", b =>

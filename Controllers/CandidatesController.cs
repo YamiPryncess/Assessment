@@ -7,6 +7,10 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Assessment.Data;
 using Assessment.Models;
+using Microsoft.Data.SqlClient;
+using System.Data.SqlTypes;
+using System.Drawing.Drawing2D;
+using static AutoMapper.Internal.ExpressionFactory;
 
 namespace Assessment.Controllers
 {
@@ -25,14 +29,14 @@ namespace Assessment.Controllers
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Candidate>>> GetCandidate()
         {
-            return await _context.Candidate.Include(candidate => candidate.TestResults).ToListAsync();
+            return await _context.Candidate.ToListAsync();
         }
 
         // GET: api/Candidates/5
         [HttpGet("{id}")]
         public async Task<ActionResult<Candidate>> GetCandidate(int id)
         {
-            var candidate = await _context.Candidate.Include(candidate => candidate.TestResults)!.ThenInclude(testResult => testResult.Test).FirstOrDefaultAsync(candidate => candidate.Id == id);
+            var candidate = await _context.Candidate.Include(c => c.Sessions)!.ThenInclude(s => s.Test).FirstOrDefaultAsync(c => c.Id == id);
 
             if (candidate == null)
             {

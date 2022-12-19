@@ -4,6 +4,7 @@ using Assessment.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,10 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Assessment.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20221210083314_Null Session Start and End")]
+    partial class NullSessionStartandEnd
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -53,7 +55,7 @@ namespace Assessment.Migrations
 
                     b.HasIndex("SessionId");
 
-                    b.ToTable("Answer", (string)null);
+                    b.ToTable("Answer");
                 });
 
             modelBuilder.Entity("Assessment.Models.ApplicationUser", b =>
@@ -197,7 +199,7 @@ namespace Assessment.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Candidate", (string)null);
+                    b.ToTable("Candidate");
                 });
 
             modelBuilder.Entity("Assessment.Models.Question", b =>
@@ -231,7 +233,7 @@ namespace Assessment.Migrations
 
                     b.HasIndex("TestId");
 
-                    b.ToTable("Question", (string)null);
+                    b.ToTable("Question");
                 });
 
             modelBuilder.Entity("Assessment.Models.Session", b =>
@@ -282,7 +284,7 @@ namespace Assessment.Migrations
 
                     b.HasIndex("TestId");
 
-                    b.ToTable("Session", (string)null);
+                    b.ToTable("Session");
                 });
 
             modelBuilder.Entity("Assessment.Models.Test", b =>
@@ -309,7 +311,7 @@ namespace Assessment.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Test", (string)null);
+                    b.ToTable("Test");
                 });
 
             modelBuilder.Entity("Assessment.Models.TestSession", b =>
@@ -339,7 +341,7 @@ namespace Assessment.Migrations
                     b.Property<int>("TestId")
                         .HasColumnType("int");
 
-                    b.ToTable("TestSession", (string)null);
+                    b.ToTable("TestSession");
                 });
 
             modelBuilder.Entity("Duende.IdentityServer.EntityFramework.Entities.DeviceFlowCodes", b =>
@@ -425,7 +427,7 @@ namespace Assessment.Migrations
 
                     b.HasIndex("Use");
 
-                    b.ToTable("Keys", (string)null);
+                    b.ToTable("Keys");
                 });
 
             modelBuilder.Entity("Duende.IdentityServer.EntityFramework.Entities.PersistedGrant", b =>

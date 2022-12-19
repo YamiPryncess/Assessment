@@ -20,8 +20,12 @@ builder.Services.AddCors(options => options.AddPolicy(
         builder.WithOrigins("https://localhost:44452/").AllowAnyMethod().AllowAnyHeader();
     }));
 
-builder.Services.AddControllersWithViews().AddJsonOptions(x =>
-                x.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.IgnoreCycles);
+builder.Services.AddControllers().AddJsonOptions(x =>
+{
+    x.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.IgnoreCycles;
+    x.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter());
+});
+
 builder.Services.AddSwaggerGen(options => {
     options.SwaggerDoc("v1", new Microsoft.OpenApi.Models.OpenApiInfo { Title = "My Api", Version = "v1" });
 });

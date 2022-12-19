@@ -8,7 +8,7 @@ namespace Assessment.Models
     {
         [Key]
         public int Id { get; set; }
-        public virtual ICollection<TestResult>? TestResults { get; set; } = new List<TestResult>();
+        public virtual ICollection<Session>? Sessions { get; set; } = new List<Session>();
         public DateTime CreatedDateTime { get; set; } = DateTime.Now;
 
         [Required, MaxLength(100)]

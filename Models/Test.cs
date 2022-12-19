@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel;
+using System.ComponentModel.DataAnnotations;
 
 namespace Assessment.Models
 {
@@ -9,9 +10,10 @@ namespace Assessment.Models
         [Required, MaxLength(100)]
         public string Name { get; set; } = String.Empty;
         public int QuestionsAsked { get; set; } = 0;
-        public virtual ICollection<TestResult>? TestResults { get; set; } = new List<TestResult>();
+        [Required]
+        public float minutes { get; set; } = 0.25f;
+        public virtual ICollection<Session>? Sessions { get; set; } = new List<Session>();
         public virtual ICollection<Question>? Questions { get; set; } = new List<Question>();
         public DateTime CreatedDateTime { get; set; } = DateTime.Now;
     }
 }
-//[TestGuid] [uniqueidentifier] NOT NULL,

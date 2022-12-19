@@ -7,12 +7,12 @@ namespace Assessment.Models
     {
         [Key]
         public int Id { get; set; }
+        public virtual ICollection<Answer>? Answers { get; set; } = new List<Answer>();
         [Required, MaxLength(100)]
         public string Text { get; set; } = String.Empty;
         [MaxLength(100)]
         public string Image { get; set; } = String.Empty;
         public int Index { get; set; } = 0;
-        [Required, ForeignKey("TestId")]
         public int TestId { get; set; }
         public virtual Test? Test { get; set; }
         public DateTime CreatedDateTime { get; set; } = DateTime.Now;

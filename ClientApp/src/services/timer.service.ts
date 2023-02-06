@@ -62,6 +62,8 @@ export class TimerService {
     }
 
     stopCountdown() {
-        this.subscription!.unsubscribe();
+        if(this.subscription){
+            this.subscription!.unsubscribe();
+        }
     }
 }

@@ -130,7 +130,7 @@ export class SessionComponent implements OnInit, OnDestroy {
     this.showModalDialog();
     this.updateAnswers();
     this.checkAndUpdateEnd(this.timer.endTime, manualSubmission);
-    this.httpService.putSession(this.session);
+    this.httpService.putSession(this.session).subscribe(x => console.log(x));
   }
 
   showModalDialog() {

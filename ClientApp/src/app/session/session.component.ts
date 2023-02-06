@@ -1,4 +1,4 @@
-import { Component, HostListener, OnInit } from '@angular/core';
+import { Component, HostListener, OnDestroy, OnInit } from '@angular/core';
 import { FormBuilder, FormArray, FormControl, Validators } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import { take } from 'rxjs';
@@ -17,7 +17,7 @@ import { EndingMethod } from 'src/enums/ending-method.enum';
   templateUrl: './session.component.html',
   styleUrls: ['./session.component.css']
 })
-export class SessionComponent implements OnInit {
+export class SessionComponent implements OnInit, OnDestroy {
   guid: string = "";
   session = {} as Session;
   answers: FormArray = this.fb.array([]);
@@ -62,6 +62,10 @@ export class SessionComponent implements OnInit {
         }
       });
     });
+  }
+
+  ngOnDestroy(): void {
+    this.timer.stopCountdown();
   }
 
   startTest() {

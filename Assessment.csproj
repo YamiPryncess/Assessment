@@ -38,6 +38,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Folder Include="ClientApp\src\app\test\" />
     <Folder Include="Migrations\" />
   </ItemGroup>
 

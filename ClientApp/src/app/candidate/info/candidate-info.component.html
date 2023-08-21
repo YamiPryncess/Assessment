@@ -1,0 +1,99 @@
+<form class="container-fluid" [formGroup]="candidateForm" (ngSubmit)="onSubmit()">
+  <div *ngIf="!hideCreateInfo" class="my-5 row g-3">
+    <div class="col-md-4">
+      <label class="form-label">ID: </label>
+      <input pInputText id="id" formControlName="id" type="text" class="w-100" required>
+    </div>
+    <div class="col-md-4">
+        <label class="form-label">Created Date: </label>
+        <p-calendar id="createdDateTime" [(ngModel)]="candidateCreatedDT" class="w-100" disabled
+                    [ngModelOptions]="{standalone: true}" [style]="{'width':'100%'}" [inputStyle]="{'width':'100%'}"></p-calendar>
+    </div>
+    <div class="col-md-4">
+      <label class="form-label">Created By: </label>
+      <input pInputText id="createdBy" type="text" formControlName="createdBy" class="w-100">
+    </div>
+  </div>
+
+  <div class="my-5 row g-3">
+    <div class="col-md-6">
+      <label class="form-label">First Name: </label>
+      <input pInputText id="first-name" type="text" formControlName="firstName" class="w-100"
+             [ngClass]="attemptedSubmit && !candidateForm.controls.firstName.valid ? 'ng-invalid ng-dirty' : ''" required>
+    </div>
+
+    <div class="col-md-6">
+      <label class="form-label">Last Name: </label>
+      <input pInputText id="last-name" type="text" formControlName="lastName" class="w-100"
+             [ngClass]="attemptedSubmit && !candidateForm.controls.lastName.valid ? 'ng-invalid ng-dirty' : ''" required>
+    </div>
+    <div class="col-md-6">
+      <label class="form-label">SSN: </label>
+      <input pInputText id="ssn" type="text" formControlName="ssn" class="w-100"
+             [ngClass]="attemptedSubmit && !candidateForm.controls.ssn.valid ? 'ng-invalid ng-dirty' : ''" required>
+    </div>
+    <div class="col-md-6">
+      <label class="form-label">DOB: </label>
+      <p-calendar id="dob" [(ngModel)]="candidateDob" class="" [style]="{'width':'100%'}" [inputStyle]="{'width':'100%'}"
+                  [ngModelOptions]="{standalone: true}" [required]="true" [ngClass]="attemptedSubmit && !candidateForm.controls.dob.valid ? 'ng-invalid ng-dirty' : ''"></p-calendar>
+    </div>
+    <div class="col-md-6">
+      <label class="form-label">Email: </label>
+      <input pInputText id="email" type="text" formControlName="email" class="w-100"
+             [ngClass]="attemptedSubmit && !candidateForm.controls.email.valid ? 'ng-invalid ng-dirty' : ''" required>
+    </div>
+    <div class="col-md-6">
+      <label class="form-label">Desired Job Title: </label>
+      <input pInputText id="desiredJobTitle" type="text" formControlName="desiredJobTitle" class="w-100"
+             [ngClass]="attemptedSubmit && !candidateForm.controls.desiredJobTitle.valid ? 'ng-invalid ng-dirty' : ''" required>
+    </div>
+  </div>
+
+  <div class="my-5 row g-3">
+    <div class="col-md-6">
+      <label class="form-label">Source One: </label>
+      <input pInputText  id="source1" type="text" formControlName="source1" class="w-100"
+             [ngClass]="attemptedSubmit && !candidateForm.controls.source1.valid ? 'ng-invalid ng-dirty' : ''" required>
+    </div>
+    <div class="col-md-6">
+      <label class="form-label">Source Two: </label>
+      <input pInputText id="source2" type="text" formControlName="source2" class="w-100"
+             [ngClass]="attemptedSubmit && !candidateForm.controls.source2.valid ? 'ng-invalid ng-dirty' : ''">
+    </div>
+    <div class="col-md-6">
+      <label class="form-label">Background Check Authorization Timestamp ET: </label>
+      <p-calendar id="backgroundCheckAuthorizationTimestampET" [(ngModel)]="candidateBgTimeStamp" [style]="{'display': 'flex', 'width':'100%'}" [inputStyle]="{'width':'100%'}"
+                  [ngModelOptions]="{standalone: true}" [required]="true" [ngClass]="attemptedSubmit && !candidateForm.controls.backgroundCheckAuthorizationTimestampET.valid ? 'ng-invalid ng-dirty' : ''"></p-calendar>
+    </div>
+    <div class="col-md-6">
+      <label class="form-label">Background Check Level: </label>
+      <input pInputText id="backgroundCheckLevel" type="text" formControlName="backgroundCheckLevel" class="w-100"
+             [ngClass]="attemptedSubmit && !candidateForm.controls.backgroundCheckLevel.valid ? 'ng-invalid ng-dirty' : ''">
+    </div>
+    <div class="col-md-6">
+      <label class="form-label">Drivers License State: </label>
+      <input pInputText id="driversLicenseState" type="text" formControlName="driversLicenseState" class="w-100"
+             [ngClass]="attemptedSubmit && !candidateForm.controls.driversLicenseState.valid ? 'ng-invalid ng-dirty' : ''">
+    </div>
+    <div class="col-md-6">
+      <label class="form-label">Drivers License Number: </label>
+      <input pInputText id="driversLicenseNumber" type="text" formControlName="driversLicenseNumber" class="w-100"
+             [ngClass]="attemptedSubmit && !candidateForm.controls.driversLicenseNumber.valid ? 'ng-invalid ng-dirty' : ''">
+    </div>
+  </div>
+
+  <div class="my-5 row g-3">
+    <div class="col-md-6">
+      <label class="form-label">Status: </label>
+      <div *ngFor="let status of statuses" class="field-checkbox">
+        <p-radioButton [inputId]="status" [value]="status" formControlName="status"></p-radioButton>
+        <label [for]="status" class="ml-2 mx-4">{{ status }}</label>
+      </div>
+    </div>
+  </div>
+
+  <div class="col-12 my-3">
+    <button class="me-2 px-3 btn btn-primary" type="submit">Submit</button>
+
+  </div>
+</form>

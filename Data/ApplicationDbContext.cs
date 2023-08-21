@@ -35,6 +35,13 @@ namespace Assessment.Data
 
             //Enum
             modelBuilder
+                .Entity<Candidate>()
+                .Property(c => c.Status)
+                .HasConversion(
+                    v => v.ToString(),
+                    v => (CandidateStatus)Enum.Parse(typeof(CandidateStatus), v));
+            
+            modelBuilder
                 .Entity<Session>()
                 .Property(s => s.Status)
                 .HasConversion(

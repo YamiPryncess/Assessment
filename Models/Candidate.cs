@@ -33,9 +33,15 @@ namespace Assessment.Models
         public String DriversLicenseState { get; set; } = String.Empty;
         [MaxLength(20)]
         public String DriversLicenseNumber { get; set; } = String.Empty;
-        [Required, MaxLength(50)]
-        public string Status { get; set; } = String.Empty;
+        [Required]
+        public CandidateStatus Status { get; set; }
         [MaxLength(200)]
         public string CreatedBy { get; set; } = String.Empty;
+    }
+    
+    public enum CandidateStatus {
+        InProgress,
+        Hired,
+        Rejected
     }
 }

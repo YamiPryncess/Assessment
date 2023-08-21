@@ -1,22 +1,22 @@
 import { Session } from "./session.model";
-import { DateTime } from "luxon";
+import {CandidateStatus} from "../enums/candidate-status.enum";
 
 export interface Candidate {
     id: number;
-    createdDateTime: DateTime;
+    createdDateTime: string;
     firstName: string;
     lastName: string;
     ssn: string;
-    dob: DateTime;
+    dob: string;
     email: string;
     source1: string;
     source2: string;
     desiredJobTitle: string;
-    backgroundCheckAuthorizationTimestampET: DateTime;
+    backgroundCheckAuthorizationTimestampET: string;
     backGroundCheckLevel: string;
     driversLicenseState: string;
     driversLicenseNumber: string;
-    status: string;
+    status: CandidateStatus;
     createdBy: string;
     sessions: Session[];
 }

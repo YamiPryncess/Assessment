@@ -2,7 +2,6 @@ import {Injectable} from '@angular/core';
 import { Subscription, interval } from 'rxjs';
 import { DateTime } from "luxon";
 
-@Injectable({ providedIn: 'root' })
 export class TimerService {
     intervalId?: any;
     finishedFunc?: Function;
@@ -22,7 +21,7 @@ export class TimerService {
         this.totalMinutes = minutes;
         this.startTime = startTime;
         this.endTime = startTime + this.minutesToMilliseconds(minutes);
-        
+
         this.updateCountdown(this.endTime - this.startTime);
     }
 

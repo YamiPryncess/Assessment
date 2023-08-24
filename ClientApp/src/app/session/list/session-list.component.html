@@ -1,4 +1,4 @@
-<button class="btn btn-primary float-end" (click)="assignModal()">Assign Session</button>
+<button class="btn btn-primary float-end" (click)="showAssignModal()">Assign Session</button>
 <h1>Sessions</h1>
 
 <p-table [value]="sessions" [paginator]="true" [rows]="5" [showCurrentPageReport]="true" responsiveLayout="scroll"
@@ -33,7 +33,7 @@
 
       <td>{{session.id}}</td>
       <td>{{session.test.name}}</td>
-      <td>{{session.candidate.name}}</td>
+      <td>{{session.candidate.firstName + " " +  session.candidate.lastName}}</td>
 
       <td>{{session.status}}</td>
       <td>{{session.score}}</td>
@@ -46,3 +46,26 @@
     </tr>
   </ng-template>
 </p-table>
+
+<p-dialog header="Assign Test to Candidate" [(visible)]="displayModal" [modal]="true" [style]="{width: '20vw', height: '22vw'}">
+
+  <form class="container" [formGroup]="assignForm" (ngSubmit)="submitAssignModal()">
+    <div class="row my-2">
+      <label class="col-4 col-form-label">Candidate</label>
+      <div class="col-8">
+        <p-dropdown class="mx-3" [options]="candidates" formControlName="candidateId" optionValue="id"
+                    placeholder="Select Candidate" optionLabel="firstName"></p-dropdown>
+      </div>
+    </div>
+
+    <div class="row my-2">
+      <label class="col-sm-4 col-form-label">Test</label>
+      <div class="col-sm-8">
+        <p-dropdown class="mx-3" [options]="tests" formControlName="testId" optionValue="id"
+                    placeholder="Select Test" optionLabel="name"></p-dropdown>
+      </div>
+    </div>
+
+    <button type="submit" class="btn btn-primary m-5 ">Submit</button>
+  </form>
+</p-dialog>

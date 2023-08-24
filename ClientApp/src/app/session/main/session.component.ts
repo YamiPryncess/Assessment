@@ -15,7 +15,8 @@ import { EndingMethod } from 'src/enums/ending-method.enum';
 @Component({
   selector: 'app-session',
   templateUrl: './session.component.html',
-  styleUrls: ['./session.component.css']
+  styleUrls: ['./session.component.css'],
+  providers: [TimerService]
 })
 export class SessionComponent implements OnInit, OnDestroy {
   guid: string = "";

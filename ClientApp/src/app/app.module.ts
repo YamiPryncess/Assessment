@@ -14,6 +14,7 @@ import { InputTextModule } from 'primeng/inputtext';
 import { RadioButtonModule } from 'primeng/radiobutton';
 import { CalendarModule } from 'primeng/calendar';
 import {ToastModule} from 'primeng/toast';
+import { DropdownModule } from 'primeng/dropdown';
 
 import {MessageService} from "primeng/api";
 
@@ -65,6 +66,7 @@ import { TestCreateComponent } from './test/create/test-create.component';
     CalendarModule,
     RadioButtonModule,
     ToastModule,
+    DropdownModule,
     RouterModule.forRoot([
       { path: '', component: HomeComponent, pathMatch: 'full' },
 

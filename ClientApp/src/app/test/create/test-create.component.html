@@ -1,1 +1,29 @@
-<p>test-create works!</p>
+<form class="container" [formGroup]="testForm">
+  <div class="row">
+    <label class="col-form-label form-label">Test Name</label>
+    <input pInputText id="testName" type="text" formControlName="name" class="w-100" required>
+
+    <label class="col-form-label form-label">Length in Minutes (must be at least 6 seconds / .1 minutes)</label>
+    <input pInputText id="minutes" type="number" formControlName="minutes" class="w-100"
+           [ngClass]="attemptedSubmit && !testForm.controls.minutes.valid ? 'ng-invalid ng-dirty' : ''" required>
+  </div>
+
+  <div formArrayName="questions">
+    <div formGroupName="{{i}}" class="row my-3" *ngFor="let question of testForm.controls.questions.controls; let i=index">
+      <h3>Question {{i + 1}}</h3>
+
+      <label for="questions-{{ i }}" class="col-form-label form-label">Image</label>
+      <input pInputText id="questions-{{ i }}" type="text" formControlName="image">
+
+      <label for="questions-{{ i }}" class="col-form-label form-label">Text</label>
+      <input pInputText id="questions-{{ i }}" type="text" formControlName="text"
+             [ngClass]="attemptedSubmit && question.controls.text.value == '' ? 'ng-invalid ng-dirty' : ''" required>
+    </div>
+  </div>
+
+  <div class="float-start">
+    <button class="btn btn-primary me-2 col" (click)="addQuestion()">Add Question</button>
+    <button class="btn btn-primary me-2 col" (click)="removeQuestion()">Remove Question</button>
+  </div>
+  <button type="submit" class="btn btn-primary float-end" (click)="onSubmit()">Submit</button>
+</form>

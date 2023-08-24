@@ -32,7 +32,8 @@ namespace Assessment.Controllers
         [HttpGet("{id}")]
         public async Task<ActionResult<Test>> GetTest(int id)
         {
-            var test = await _context.Test.FindAsync(id);
+            var test = await _context.Test.Include(t => t.Questions)
+                .FirstOrDefaultAsync(t => t.Id == id);
 
             if (test == null)
             {

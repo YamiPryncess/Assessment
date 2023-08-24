@@ -1,5 +1,5 @@
 <div class="row mb-3">
-    <h3 class="col-sm-2">Test Name</h3>
+    <h3 class="col-sm-2">{{session.test.name}}</h3>
     <p class="col d-flex justify-content-end">
         Current Time: {{timer.timeLeft}}
     </p>
@@ -9,20 +9,21 @@
 
 <form class="container" (ngSubmit)="onSubmit()" *ngIf="session.status === statuses.Started || session.status === statuses.Finished">
     <div class="row mb-3" *ngFor="let answer of answers.controls; let i=index">
-        <div>
-            <img src="{{session.test.questions[i].image}}" alt="image-{{ i }}" width="420" height="320">
-        </div>
-        <label for="test-{{ i }}" class="col-form-label form-label">
-            {{session.test.questions[i].text}}
-        </label>
-        <div class="col-sm-8">
-            <textarea id="test-{{ i }}" type="text" class="form-control" 
-                [formControl]="$any(answer)" maxlength="4000">
-            </textarea>
-        </div>
+      <h3>Question {{i + 1}}</h3>
+      <div *ngIf="session.test.questions[i].image != ''">
+        <img src="{{session.test.questions[i].image}}" width="420" height="320">
+      </div>
+      <label for="answer-{{ i }}" class="col-form-label form-label">
+        {{session.test.questions[i].text}}
+      </label>
+      <div class="col-sm-8">
+        <textarea id="answer-{{ i }}" type="text" class="form-control"
+            [formControl]="$any(answer)" maxlength="4000">
+        </textarea>
+      </div>
     </div>
 
-    <button type="submit" class="btn btn-primary mb-3 float-end" onsubmit="onSubmit()" *ngIf="session.status === statuses.Started || session.status === statuses.Finished" [disabled]="!answers.valid || session.status === statuses.Finished">Submit</button>
+    <button type="submit" class="btn btn-primary mb-3 float-end" *ngIf="session.status === statuses.Started || session.status === statuses.Finished" [disabled]="!answers.valid || session.status === statuses.Finished">Submit</button>
 </form>
 
 <p-dialog header="Test Finished" [(visible)]="displayModal" [modal]="true" [style]="{width: '50vw'}"

@@ -1,1 +1,17 @@
-<p>test works!</p>
+<div class="container">
+  <div class="row">
+    <h2 id="testName">{{test.name}}</h2>
+
+    <p id="minutes">{{test.minutes}} Minutes</p>
+  </div>
+
+  <div class="row my-3" *ngFor="let question of test.questions; let i=index">
+    <h3>Question {{i + 1}}</h3>
+
+    <div *ngIf="question.image != ''">
+      <img src="{{question.image}}" width="420" height="320">
+    </div>
+
+    <p id="questions-{{i}}-text">{{question.text}}</p>
+  </div>
+</div>

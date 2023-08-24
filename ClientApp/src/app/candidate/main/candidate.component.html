@@ -34,7 +34,7 @@
             </ng-template>
         </p-table>
     </p-tabPanel>
-    
+
     <p-tabPanel header="Assign Tests">
         <p-table [value]="assignedSessions" responsiveLayout="scroll">
             <ng-template pTemplate="header">
@@ -54,7 +54,9 @@
                         <button *ngIf=assigned.id type="button" pButton (click)="removeTest(assigned)" class="">Remove</button>
                     </td>
                     <td>{{assigned.id}}</td>
-                    <td>{{assigned.guid}}</td>
+                    <td>
+                      <a [routerLink]="['/session', assigned.guid]">{{assigned.guid}}</a>
+                    </td>
                     <td>{{assigned.name}}</td>
                     <td>{{assigned.createdDateTime}}</td>
                     <td>{{assigned.questionsAsked}}</td>

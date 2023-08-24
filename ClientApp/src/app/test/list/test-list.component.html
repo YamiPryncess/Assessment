@@ -1,1 +1,28 @@
-<p>test-list works!</p>
+<button class="btn btn-primary float-end" (click)="onNewTest()">New Test</button>
+<h1>Tests</h1>
+
+<p-table [value]="tests" [paginator]="true" [rows]="5" [showCurrentPageReport]="true" responsiveLayout="scroll"
+         currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries" [rowsPerPageOptions]="[5,10,15]">
+  <ng-template pTemplate="header">
+    <tr>
+      <th style="width:8rem"></th>
+      <th pSortableColumn="id">ID<p-sortIcon field="id"></p-sortIcon></th>
+      <th pSortableColumn="name">Name <p-sortIcon field="name"></p-sortIcon></th>
+      <th pSortableColumn="questionsAsked">Questions Asked<p-sortIcon field="questionsAsked"></p-sortIcon></th>
+      <th pSortableColumn="minutes">Length in Mins<p-sortIcon field="minutes"></p-sortIcon></th>
+      <th pSortableColumn="createdDateTime">Creation Time<p-sortIcon field="createdDateTime"></p-sortIcon></th>
+    </tr>
+  </ng-template>
+  <ng-template pTemplate="body" let-test>
+    <tr>
+      <td style="text-align:center">
+        <button type="button" pButton icon="pi pi-user-edit" (click)="onRowView(test)" class="p-button-rounded p-button-text"></button>
+      </td>
+      <td>{{test.id}}</td>
+      <td>{{test.name}}</td>
+      <td>{{test.questionsAsked}}</td>
+      <td>{{test.minutes}}</td>
+      <td>{{test.createdDateTime}}</td>
+    </tr>
+  </ng-template>
+</p-table>

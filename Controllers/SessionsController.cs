@@ -28,14 +28,23 @@ namespace Assessment.Controllers
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Session>>> GetSession()
         {
-            return await _context.Session.Include(s => s.Answers).ToListAsync();
+            return await _context.Session
+                .Include(s => s.Answers)
+                .Include(s => s.Candidate)
+                .Include(s => s.Test)
+                .ToListAsync();
         }
 
         // GET: api/Sessions/5
         [HttpGet("{id}")]
         public async Task<ActionResult<Session>> GetSession(int id)
         {
-            var session = await _context.Session.FindAsync(id);
+            var session = await _context.Session.Where(s => s.Id == id).
+                Include(s => s.Answers)
+                .Include(s => s.Candidate)
+                .Include(s => s.Test)
+                .ThenInclude(t => t.Questions)
+                .SingleAsync();
 
             if (session == null)
             {

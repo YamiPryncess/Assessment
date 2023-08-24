@@ -56,7 +56,7 @@ export class TestCreateComponent implements OnInit {
     let valid : boolean = true;
     if(questions) {
       for(let i = 0; i < questions.length; i++) {
-        if(questions[i].text == '') {
+        if(questions[i].text === '') {
           valid = false;
         }
       }

@@ -31,15 +31,15 @@ export class SessionListComponent implements OnInit {
   ngOnInit(): void {
     this.router.onSameUrlNavigation = "reload"
     this.httpService.getSessions().pipe(take(1)).subscribe(result => {
-      this.sessions = result as Session[];
+      this.sessions = result;
     });
 
     this.httpService.getCandidates().pipe(take(1)).subscribe(result => {
-      this.candidates = result as Candidate[];
+      this.candidates = result;
     });
 
     this.httpService.getTests().pipe(take(1)).subscribe(result => {
-      this.tests = result as Test[];
+      this.tests = result;
     });
   }
 
@@ -63,7 +63,7 @@ export class SessionListComponent implements OnInit {
         this.displayModal = false;
         this.messageService.add({severity:'success', summary:'Success!', detail:'Assignment worked!'});
         this.httpService.getSessions().pipe(take(1)).subscribe(result => {
-          this.sessions = result as Session[];
+          this.sessions = result;
         });
       }, error => {
         this.messageService.add({severity:'error', summary:'Error!', detail:'Assignment failed!'});

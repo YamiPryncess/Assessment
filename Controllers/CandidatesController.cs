@@ -36,7 +36,7 @@ namespace Assessment.Controllers
         [HttpGet("{id}")]
         public async Task<ActionResult<Candidate>> GetCandidate(int id)
         {
-            var candidate = await _context.Candidate.Include(c => c.Sessions)!.ThenInclude(s => s.Test).FirstOrDefaultAsync(c => c.Id == id);
+            var candidate = await _context.Candidate.Include(c => c.Sessions)!.ThenInclude(s => s.Test).FirstAsync(c => c.Id == id);
 
             if (candidate == null)
             {

@@ -20,7 +20,7 @@ import { EndingMethod } from 'src/enums/ending-method.enum';
 })
 export class SessionComponent implements OnInit, OnDestroy {
   guid: string = "";
-  testName: string = ""
+  testName: string = "";
   session = {} as Session;
   answers: FormArray = this.fb.array([]);
   readonly statuses = SessionStatus;
@@ -44,7 +44,7 @@ export class SessionComponent implements OnInit, OnDestroy {
     this.route.params.subscribe(params => {
       this.guid = params.guid;
       this.httpService.getSessionByGuid(this.guid).pipe(take(1)).subscribe(results => {
-        this.session = results as Session;
+        this.session = results;
         this.testName = this.session?.test?.name ? this.session?.test?.name : "Test";
         this.updateAnswersWithSession();
         switch(this.session.status) {
@@ -73,7 +73,7 @@ export class SessionComponent implements OnInit, OnDestroy {
 
   startTest() {
     let startTime = DateTime.now();
-    if(this.session.startTime == void(0) || this.session.status == SessionStatus.Assigned) {
+    if(this.session.startTime === void(0) || this.session.status === SessionStatus.Assigned) {
       this.session.startTime = startTime;
       this.session.status = SessionStatus.Started;
       this.session.endMethod = EndingMethod.NotEnded;
@@ -93,7 +93,7 @@ export class SessionComponent implements OnInit, OnDestroy {
   }
 
   updateSessionWithAnswers() {
-    let latestAnswers = [] as Answer[];
+    let latestAnswers = [];
     for(let i = 0; i < this.session.test.questions.length; i++) {
       latestAnswers.push({
         text: this.answers.value[i],

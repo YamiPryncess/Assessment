@@ -21,7 +21,7 @@ export class TestComponent implements OnInit {
       this.id = params.id;
       this.httpService.getTest(this.id).pipe(take(1)).subscribe(
         result => {
-          this.test = result as Test;
+          this.test = result;
         });
     });
   }

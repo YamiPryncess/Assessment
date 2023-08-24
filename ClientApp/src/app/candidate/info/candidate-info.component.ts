@@ -80,9 +80,9 @@ export class CandidateInfoComponent implements OnInit {
     this.validateForm();
     console.log(this.candidateForm.valid);
     if(this.candidateForm.valid){
-      if(this.submitMode == SubmitMode.Create) {
+      if(this.submitMode === SubmitMode.Create) {
         this.httpService.postCandidate(this.candidateForm.value as Candidate).subscribe(result => this.router.navigate(['/candidate']));
-      } else if (this.submitMode == SubmitMode.Update) {
+      } else if (this.submitMode === SubmitMode.Update) {
         let result = this.candidateForm.value;
         result.id = this.candidate.id;
         result.createdDateTime = this.candidate.createdDateTime;

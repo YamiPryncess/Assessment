@@ -18,7 +18,7 @@ export class CandidateListComponent {
 
   ngOnInit() {
     this.httpService.getCandidates().pipe(take(1)).subscribe(result => {
-      this.candidates = result as Candidate[];
+      this.candidates = result;
     });
   }
 

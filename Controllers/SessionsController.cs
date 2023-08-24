@@ -70,7 +70,7 @@ namespace Assessment.Controllers
         [HttpGet("Candidates/{id:int}/Assigned")]
         public async Task<ActionResult<IEnumerable<TestSession>>> GetAssignedSessions(int id)
         {
-            return _context.TestSession.FromSqlRaw(
+            return await _context.TestSession.FromSqlRaw(
                 "SELECT s.id, s.CandidateId, s.CreatedDateTime, s.Status, s.Guid, " +
                 "t.Id AS TestId, t.Name, t.QuestionsAsked " +
                 "FROM Session AS s " +
@@ -78,7 +78,7 @@ namespace Assessment.Controllers
                 "ON s.TestId = t.Id " +
                 "AND s.Status = 'Assigned' " +
                 "AND s.CandidateId = @Id",
-                new SqlParameter("@Id", id)).ToList();
+                new SqlParameter("@Id", id)).ToListAsync();
         }
 
         // PUT: api/Sessions/5
@@ -91,7 +91,7 @@ namespace Assessment.Controllers
                 return BadRequest();
             }
 
-            Session? dbSession = await _context.Session.Include(s => s.Answers).FirstOrDefaultAsync(s => s.Id == id);
+            Session? dbSession = await _context.Session.Include(s => s.Answers).FirstAsync(s => s.Id == id);
 
             try
             {

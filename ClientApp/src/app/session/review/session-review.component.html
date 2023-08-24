@@ -1,19 +1,20 @@
 <div class="container">
   <div class="row mb-3">
-    <h3 class="col-sm-2">{{session.test.name}}</h3>
+    <h3 class="col-sm-2">{{testName}}</h3>
   </div>
 
+  <h3>Session is {{session.status}}</h3>
+
   <div class="row mb-3" *ngFor="let answer of answers; let i=index">
-    <h3>Question {{i + 1}}</h3>
     <div *ngIf="session.test.questions[i].image != ''">
       <img src="{{session.test.questions[i].image}}" width="420" height="320">
     </div>
 
     <label for="answer-{{ i }}" class="col-form-label form-label">
-      {{session.test.questions[i].text}}
+      Question: {{session.test.questions[i].text}}
     </label>
     <div class="col-sm-8">
-      <p id="test-{{ i }}">{{answer.text}}</p>
+      <p id="test-{{ i }}">Answer: {{answer.text ? answer.text : "No Answer!"}}</p>
     </div>
   </div>
 </div>

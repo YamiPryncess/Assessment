@@ -14,7 +14,7 @@ export class TestListComponent implements OnInit {
 
   ngOnInit(): void {
     this.httpService.getTests().pipe(take(1)).subscribe(result => {
-      this.tests = result as Test[];
+      this.tests = result;
     });
   }
   onNewTest() {

@@ -17,7 +17,7 @@
 
       <label for="questions-{{ i }}" class="col-form-label form-label">Text</label>
       <input pInputText id="questions-{{ i }}" type="text" formControlName="text"
-             [ngClass]="attemptedSubmit && question.controls.text.value == '' ? 'ng-invalid ng-dirty' : ''" required>
+             [ngClass]="attemptedSubmit && question.controls.text.value === '' ? 'ng-invalid ng-dirty' : ''" required>
     </div>
   </div>
 

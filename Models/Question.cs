@@ -10,7 +10,6 @@ namespace Assessment.Models
         public virtual ICollection<Answer>? Answers { get; set; } = new List<Answer>();
         [Required, MaxLength(100)]
         public string Text { get; set; } = String.Empty;
-        [MaxLength(100)]
         public string Image { get; set; } = String.Empty;
         public int Index { get; set; } = 0;
         public int TestId { get; set; }

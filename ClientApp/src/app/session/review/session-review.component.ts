@@ -14,6 +14,7 @@ export class SessionReviewComponent implements OnInit {
   id!: number;
   session = {} as Session;
   answers = [] as Answer[];
+  testName: string = "";
 
   constructor(private httpService: HttpService, private route: ActivatedRoute) {}
   ngOnInit(): void {
@@ -21,8 +22,9 @@ export class SessionReviewComponent implements OnInit {
       this.id = params.id;
       this.httpService.getSession(this.id).pipe(take(1)).subscribe(
         result => {
-          this.session = result as Session;
+          this.session = result;
           this.answers = this.session.answers;
+          this.testName = this.session?.test?.name ? this.session?.test?.name : "Test";
         });
     });
   }

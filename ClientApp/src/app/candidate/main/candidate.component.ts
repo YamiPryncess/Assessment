@@ -33,19 +33,19 @@ export class CandidateComponent implements OnInit {
     });
 
     this.httpService.getTests().subscribe(results => {
-      this.tests = results as Test[];
+      this.tests = results;
     })
   }
 
   refreshCandidate(FromOnInit: boolean = false) {
     this.httpService.getCandidate(this.id).pipe(take(1)).subscribe(
       result => {
-      this.candidate = result as Candidate;
-      this.sessions = result.sessions as Session[];
+      this.candidate = result;
+      this.sessions = result.sessions;
       this.infoComponent.updateForm(this.candidate, !FromOnInit);
     });
     this.httpService.getAssignedSessions(this.id).subscribe(results => {
-      this.assignedSessions = results as TestSession[];
+      this.assignedSessions = results;
     });
   }
 

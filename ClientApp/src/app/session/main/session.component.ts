@@ -19,6 +19,7 @@ import { EndingMethod } from 'src/enums/ending-method.enum';
 })
 export class SessionComponent implements OnInit, OnDestroy {
   guid: string = "";
+  testName: string = ""
   session = {} as Session;
   answers: FormArray = this.fb.array([]);
   readonly statuses = SessionStatus;
@@ -32,8 +33,8 @@ export class SessionComponent implements OnInit, OnDestroy {
   @HostListener('window:beforeunload', ['$event'])
   async saveProgress($event: Event) {
     if(this.session.status === SessionStatus.Started){
-      this.updateAnswers();
-      this.checkAndUpdateEnd(this.timer.endTime, false, true);
+      this.updateSessionWithAnswers();
+      this.checkAndUpdateEndInfo(this.timer.endTime, false, true);
       await this.httpService.putSession(this.session).subscribe();
     }
   }
@@ -43,11 +44,12 @@ export class SessionComponent implements OnInit, OnDestroy {
       this.guid = params.guid;
       this.httpService.getSessionByGuid(this.guid).pipe(take(1)).subscribe(results => {
         this.session = results as Session;
-        this.getAnswers();
+        this.testName = this.session?.test?.name ? this.session?.test?.name : "Test";
+        this.updateAnswersWithSession();
         switch(this.session.status) {
           case SessionStatus.Started:
             this.timer.setTime(DateTime.now().valueOf(), this.timer.remainingTime(DateTime.fromISO(String(this.session.startTime)).valueOf(), this.session.test.minutes));
-            if(this.checkAndUpdateEnd(this.timer.endTime)) {
+            if(this.checkAndUpdateEndInfo(this.timer.endTime)) {
               this.showModalDialog();
               this.httpService.putSession(this.session);
             } else {
@@ -74,7 +76,7 @@ export class SessionComponent implements OnInit, OnDestroy {
       this.session.startTime = startTime;
       this.session.status = SessionStatus.Started;
       this.session.endMethod = EndingMethod.NotEnded;
-      this.httpService.putSession(this.session);
+      this.httpService.putSession(this.session).subscribe(x => console.log(x)); //This isn't working
     }
     this.timer.setTime(startTime.valueOf(), this.session.test.minutes);
     this.timer.startCountdown(() => {
@@ -82,14 +84,14 @@ export class SessionComponent implements OnInit, OnDestroy {
     });
   }
 
-  getAnswers() {
+  updateAnswersWithSession() {
     for(let i = 0; i < this.session.test.questions.length; i++) {
       let value = this.session.answers.length - 1 >= i ? this.session.answers[i].text : "";
         this.answers.push(new FormControl(value, Validators.required));
     }
   }
 
-  updateAnswers() {
+  updateSessionWithAnswers() {
     let latestAnswers = [] as Answer[];
     for(let i = 0; i < this.session.test.questions.length; i++) {
       latestAnswers.push({
@@ -101,9 +103,9 @@ export class SessionComponent implements OnInit, OnDestroy {
     this.session.answers = latestAnswers;
   }
 
-  checkAndUpdateEnd(endTime: number, submitted: boolean = false, browserClose: boolean = false) {
+  checkAndUpdateEndInfo(endTime: number, submitted: boolean = false, browserClose: boolean = false) {
     let expired : boolean = Date.now() >= endTime ? true : false;
-    
+
     if(submitted) {
       this.session.endTime = DateTime.fromMillis(endTime);
       this.session.endMethod = EndingMethod.ManualSubmission;
@@ -128,8 +130,8 @@ export class SessionComponent implements OnInit, OnDestroy {
   onSubmit(manualSubmission: boolean = true) {
     this.timer.stopCountdown();
     this.showModalDialog();
-    this.updateAnswers();
-    this.checkAndUpdateEnd(this.timer.endTime, manualSubmission);
+    this.updateSessionWithAnswers();
+    this.checkAndUpdateEndInfo(this.timer.endTime, manualSubmission);
     this.httpService.putSession(this.session).subscribe(x => console.log(x));
   }
 

@@ -39,8 +39,8 @@ namespace Assessment.Controllers
         [HttpGet("{id}")]
         public async Task<ActionResult<Session>> GetSession(int id)
         {
-            var session = await _context.Session.Where(s => s.Id == id).
-                Include(s => s.Answers)
+            var session = await _context.Session.Where(s => s.Id == id)
+                .Include(s => s.Answers)
                 .Include(s => s.Candidate)
                 .Include(s => s.Test)
                 .ThenInclude(t => t.Questions)
@@ -58,8 +58,12 @@ namespace Assessment.Controllers
         [HttpGet("guid/{Guid}")]
         public async Task<ActionResult<Session>> GetSessionByGuid(string Guid)
         {
-            return await _context.Session.Where(s => s.Guid.ToString() == Guid).
-                Include(s => s.Answers).Include(s => s.Test).ThenInclude(t => t.Questions).SingleAsync();
+            return await _context.Session.Where(s => s.Guid.ToString() == Guid)
+                .Include(s => s.Answers)
+                .Include(s => s.Candidate)
+                .Include(s => s.Test)
+                .ThenInclude(t => t.Questions)
+                .SingleAsync();
         }
 
         // GET: api/Sessions/Candidates/5/Assigned
@@ -117,7 +121,7 @@ namespace Assessment.Controllers
                 }
             }
 
-            return NoContent();
+            return Ok(dbSession);
         }
 
         // POST: api/Sessions

@@ -1,7 +1,7 @@
 import {Component, OnInit} from "@angular/core";
-import { Router } from '@angular/router';
-import { HttpService } from 'src/services/http.service';
-import { take } from 'rxjs';
+import {Router} from '@angular/router';
+import {HttpService} from 'src/services/http.service';
+import {take} from 'rxjs';
 import {Test} from "../../../models/test.model";
 import {Session} from "../../../models/session.model";
 import {Candidate} from "../../../models/candidate.model";
@@ -54,20 +54,35 @@ export class SessionListComponent implements OnInit {
   submitAssignModal() {
     var newSession = {} as Session;
     this.attemptedSubmit = true;
+    var submitValid = true;
+
     if(this.assignForm.valid) {
       newSession.candidateId = this.assignForm.value.candidateId!;
       newSession.testId = this.assignForm.value.testId!;
       newSession.status = SessionStatus.Assigned;
 
-      this.httpService.postSession(newSession).subscribe(results => {
-        this.displayModal = false;
-        this.messageService.add({severity:'success', summary:'Success!', detail:'Assignment worked!'});
-        this.httpService.getSessions().pipe(take(1)).subscribe(result => {
-          this.sessions = result;
+      //We don't want to make duplicate test sessions so we block it with this for loop.
+      for(let i = 0; i < this.sessions.length; i++) {
+        if((this.sessions[i].status === SessionStatus.Assigned || this.sessions[i].status === SessionStatus.Started) &&
+          this.sessions[i].candidateId === newSession.candidateId && this.sessions[i].testId === newSession.testId) {
+          submitValid = false;
+          break;
+        }
+      }
+
+      if(submitValid) {
+        this.httpService.postSession(newSession).subscribe(results => {
+          this.displayModal = false;
+          this.messageService.add({severity:'success', summary:'Success!', detail:'Assignment worked!'});
+          this.httpService.getSessions().pipe(take(1)).subscribe(result => {
+            this.sessions = result;
+          });
+        }, error => {
+          this.messageService.add({severity:'error', summary:'Error!', detail:'Assignment failed!'});
         });
-      }, error => {
-        this.messageService.add({severity:'error', summary:'Error!', detail:'Assignment failed!'});
-      });
+      } else {
+        this.messageService.add({severity:'error', summary:'Duplicate Error!', detail:'Incomplete Session already exists!'});
+      }
     }
   }
 }
